@@ -3,11 +3,7 @@ package entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 @Entity
 public class Fila {
@@ -18,11 +14,16 @@ public class Fila {
     @OneToMany(mappedBy = "fila")
     private List<Ombrellone> ombrelloni = new ArrayList<>();
 
+    @OneToMany
+    @JoinColumn(name = "ref_fila")
+    private List<TariffaFila> tariffe = new ArrayList<>();
+
     public Fila() {}
 
-    public Fila(int posizione,  List<Ombrellone> ombrelloni) {
+    public Fila(int posizione,  List<Ombrellone> ombrelloni, List<TariffaFila> tariffe) {
         this.posizione = posizione;
         this.ombrelloni = ombrelloni;
+        this.tariffe = tariffe;
     }
 
     public int getPosizione() {
@@ -35,5 +36,16 @@ public class Fila {
 
     public void aggiungiOmbrellone(Ombrellone ombrellone) {
         this.ombrelloni.add(ombrellone);
+    }
+
+    public List<TariffaFila> getTariffe() {
+        return tariffe;
+    }
+
+    public void aggiungiTariffa(TariffaFila tariffa) {
+        if(this.tariffe.size() >= 2) {
+            throw new IllegalStateException("Una fila non può avere più di 2 tariffe.");
+        }
+        this.tariffe.add(tariffa);
     }
 }
