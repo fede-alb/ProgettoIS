@@ -20,10 +20,9 @@ public class Fila {
 
     public Fila() {}
 
-    public Fila(int posizione,  List<Ombrellone> ombrelloni, List<TariffaFila> tariffe) {
+    public Fila(int posizione,  List<Ombrellone> ombrelloni) {
         this.posizione = posizione;
         this.ombrelloni = ombrelloni;
-        this.tariffe = tariffe;
     }
 
     public int getPosizione() {

@@ -4,7 +4,8 @@ import controller.ConfiguraStabilimentoController;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import dto.OmbrelloneDTO;
+import dto.FilaMappaDTO;
+import dto.OmbrelloneMappaDTO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,19 +42,18 @@ public class MappaOmbrelloniView {
 
     private void stampaOmbrelloni() {
         Date dataSelezionata = (Date) dataSpinner.getValue();
-        List<Map<OmbrelloneDTO, Boolean>> listaOmbrelloni = ConfiguraStabilimentoController.visualizzaOmbrelloni(dataSelezionata);
-        mostraPopupMappa(listaOmbrelloni);
+        List<FilaMappaDTO> file = ConfiguraStabilimentoController.visualizzaOmbrelloni(dataSelezionata);
+        mostraPopupMappa(file);
     }
 
-    private void mostraPopupMappa(List<Map<OmbrelloneDTO, Boolean>> listaOmbrelloni) {
+    private void mostraPopupMappa(List<FilaMappaDTO> file) {
         JPanel gridPanel = new JPanel(new GridLayout(0, 10, 10, 10));
         gridPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        for (Map<OmbrelloneDTO, Boolean> mappa : listaOmbrelloni) {
-            for (Map.Entry<OmbrelloneDTO, Boolean> entry : mappa.entrySet()) {
-                OmbrelloneDTO ombrellone = entry.getKey();
-                Boolean occupato = entry.getValue();
-                JLabel lblOmbrellone = getLblOmbrellone(ombrellone, occupato);
+        for (FilaMappaDTO fila : file) {
+            List<OmbrelloneMappaDTO> ombrelloni = fila.getOmbrelloni();
+            for (OmbrelloneMappaDTO ombrellone : ombrelloni) {
+                JLabel lblOmbrellone = getLblOmbrellone(ombrellone);
                 gridPanel.add(lblOmbrellone);
             }
         }
@@ -68,11 +68,11 @@ public class MappaOmbrelloniView {
         );
     }
 
-    private JLabel getLblOmbrellone(OmbrelloneDTO ombrellone, Boolean occupato) {
+    private JLabel getLblOmbrellone(OmbrelloneMappaDTO ombrellone) {
         JLabel lblOmbrellone = new JLabel("Omb. " + ombrellone.getNumero(), SwingConstants.CENTER);
         lblOmbrellone.setPreferredSize(new Dimension(40, 40));
         lblOmbrellone.setOpaque(true);
-        if (occupato) {
+        if (ombrellone.isOccupato()) {
             lblOmbrellone.setBackground(new Color(220, 53, 69));
             lblOmbrellone.setForeground(Color.WHITE);
         } else {

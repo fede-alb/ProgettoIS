@@ -1,45 +1,40 @@
 package controller;
 
-import dto.OmbrelloneDTO;
-
+import dto.FilaMappaDTO;
+import dto.OmbrelloneMappaDTO;
+import entity.Fila;
+import entity.Ombrellone;
 import entity.Stabilimento;
 
 import java.util.*;
 
 public class ConfiguraStabilimentoController {
 
-    public static List<Map<OmbrelloneDTO, Boolean>> visualizzaOmbrelloni(Date data) {
-        // STUB
-        List<Map<OmbrelloneDTO, Boolean>> list = new ArrayList<>();
-        for(int i = 0; i < 3; i++) {
-            list.add(inserisciFilaOmbrelloni(i));
+    public static List<FilaMappaDTO> visualizzaOmbrelloni(Date data) {
+        // Richiedo i dati Entity dallo Stabilimento
+        Stabilimento stabilimento = Stabilimento.getInstanza();
+        Map<Fila, Map<Ombrellone, Boolean>> mappa = stabilimento.visualizzaOmbrelloni(data);
+
+        // Costruisco la mappa in DTO da passare al Boundary
+        List<FilaMappaDTO> risultatoDTO = new ArrayList<>();
+        for (Map.Entry<Fila, Map<Ombrellone, Boolean>> entryFila : mappa.entrySet()) {
+            Fila fila = entryFila.getKey();
+            FilaMappaDTO filaDTO = new FilaMappaDTO(fila.getPosizione());
+            for (Map.Entry<Ombrellone, Boolean> entryOmb : entryFila.getValue().entrySet()) {
+                Ombrellone ombrellone = entryOmb.getKey();
+                Boolean occupato = entryOmb.getValue();
+                filaDTO.addOmbrellone(new OmbrelloneMappaDTO(ombrellone.getNumero(), occupato));
+            }
+            risultatoDTO.add(filaDTO);
         }
-        return list;
+        return risultatoDTO;
     }
 
-    private static Map<OmbrelloneDTO, Boolean> inserisciFilaOmbrelloni(int offset) {
-        Map<OmbrelloneDTO, Boolean> fila = new LinkedHashMap<>();
-        for(int i = 1 + offset * 10; i <= (offset + 1) * 10;  i++) {
-            if(i % 2 == 0) { fila.put(new OmbrelloneDTO(i), true); }
-            else { fila.put(new OmbrelloneDTO(i), false); }
-        }
-        return fila;
-    }
-
-    //Per ora commentato, in seguito forse useremo lui
-    /*public boolean configuraStabilimento(int nPrimaFila,
+    public boolean configuraStabilimento(int nPrimaFila,
                                          int nFilaIntermedia,
                                          int nUltimaFila,
                                          Map<String, Integer> servizi) {
         return Stabilimento.getInstanza()
                 .configuraStabilimento(nPrimaFila, nFilaIntermedia, nUltimaFila, servizi);
-    }*/
-
-    //Temporaneo, per test
-    public boolean configuraStabilimento(int nPrimaFila,
-                                         int nFilaIntermedia,
-                                         int nUltimaFila,
-                                         Map<String, Integer> servizi) {
-        return true;
     }
 }

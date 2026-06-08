@@ -34,7 +34,6 @@ public class Prenotazione {
     public Prenotazione() {}
 
     public Prenotazione(Date data, Ombrellone ombrellone, Set<ServizioAggiuntivo> servizi,  Cliente cliente) {
-        this.cliente = cliente;
         this.data = data;
         this.ombrellone = ombrellone;
         this.servizi = servizi;
@@ -42,6 +41,7 @@ public class Prenotazione {
         this.prezzo = 50; // Prezzo casuale, per ora
         // NOTA: Chiamerà il metodo privato calcolaTariffa()
         // calcolaTariffa() { this.prezzo = ...; }
+        this.cliente = cliente;
     }
 
     public Long getIdPrenotazione() {
@@ -70,5 +70,10 @@ public class Prenotazione {
 
     public Cliente getCliente() {
         return cliente;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + idPrenotazione + ", data: " + data + ", stato: " + stato;
     }
 }

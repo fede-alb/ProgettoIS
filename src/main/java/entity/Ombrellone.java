@@ -17,8 +17,7 @@ public class Ombrellone {
 
     public Ombrellone() {}
 
-    public Ombrellone(int numero, Fila fila) {
-        this.numero = numero;
+    public Ombrellone(Fila fila) {
         this.fila = fila;
     }
 
@@ -28,5 +27,18 @@ public class Ombrellone {
 
     public Fila getFila() {
         return fila;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ombrellone ombrellone = (Ombrellone) o;
+        return numero == ombrellone.numero;
+    }
+
+    @Override
+    public int hashCode() {
+        return numero;
     }
 }
