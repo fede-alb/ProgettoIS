@@ -2,9 +2,12 @@ package controller;
 
 import dto.OmbrelloneDTO;
 
+import entity.Stabilimento;
+
 import java.util.*;
 
 public class ConfiguraStabilimentoController {
+
     public static List<Map<OmbrelloneDTO, Boolean>> visualizzaOmbrelloni(Date data) {
         // STUB
         List<Map<OmbrelloneDTO, Boolean>> list = new ArrayList<>();
@@ -21,5 +24,22 @@ public class ConfiguraStabilimentoController {
             else { fila.put(new OmbrelloneDTO(i), false); }
         }
         return fila;
+    }
+
+    //Per ora commentato, in seguito forse useremo lui
+    /*public boolean configuraStabilimento(int nPrimaFila,
+                                         int nFilaIntermedia,
+                                         int nUltimaFila,
+                                         Map<String, Integer> servizi) {
+        return Stabilimento.getInstanza()
+                .configuraStabilimento(nPrimaFila, nFilaIntermedia, nUltimaFila, servizi);
+    }*/
+
+    //Temporaneo, per test
+    public boolean configuraStabilimento(int nPrimaFila,
+                                         int nFilaIntermedia,
+                                         int nUltimaFila,
+                                         Map<String, Integer> servizi) {
+        return true;
     }
 }
