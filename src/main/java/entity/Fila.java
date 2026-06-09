@@ -14,8 +14,8 @@ public class Fila {
     @OneToMany(mappedBy = "fila")
     private List<Ombrellone> ombrelloni = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name = "ref_fila")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "ref_fila", nullable = false)
     private List<TariffaFila> tariffe = new ArrayList<>();
 
     public Fila() {}

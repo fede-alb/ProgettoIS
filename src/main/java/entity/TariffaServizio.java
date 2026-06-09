@@ -18,4 +18,8 @@ public class TariffaServizio extends Tariffa {
     public TariffaServizio(int importo, PeriodoTariffa periodo) {
         super(importo, periodo);
     }
+
+    public Long getIdTariffaServizio() {
+        return idTariffaServizio;
+    }
 }

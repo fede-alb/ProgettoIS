@@ -2,9 +2,8 @@ package controller;
 
 import dto.FilaMappaDTO;
 import dto.OmbrelloneMappaDTO;
-import entity.Fila;
-import entity.Ombrellone;
-import entity.Stabilimento;
+import dto.ServizioAggiuntivoDTO;
+import entity.*;
 
 import java.util.*;
 
@@ -30,11 +29,25 @@ public class ConfiguraStabilimentoController {
         return risultatoDTO;
     }
 
-    public boolean configuraStabilimento(int nPrimaFila,
+    public static boolean configuraStabilimento(int nPrimaFila,
                                          int nFilaIntermedia,
                                          int nUltimaFila,
                                          Map<String, Integer> servizi) {
         return Stabilimento.getInstanza()
                 .configuraStabilimento(nPrimaFila, nFilaIntermedia, nUltimaFila, servizi);
+    }
+
+    public static List<ServizioAggiuntivoDTO> getServizi() {
+        Stabilimento stabilimento = Stabilimento.getInstanza();
+        List<ServizioAggiuntivo> servizi = stabilimento.getServizi();
+        List<ServizioAggiuntivoDTO> risultatoDTO = new ArrayList<>();
+        for(ServizioAggiuntivo servizio : servizi) {
+            risultatoDTO.add(new ServizioAggiuntivoDTO(
+                    servizio.getId(),
+                    servizio.getDescrizione(),
+                    servizio.getDisponibilita()
+            ));
+        }
+        return risultatoDTO;
     }
 }

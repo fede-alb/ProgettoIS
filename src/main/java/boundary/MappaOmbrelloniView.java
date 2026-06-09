@@ -11,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.List;
 
@@ -20,7 +22,10 @@ public class MappaOmbrelloniView {
     private JSpinner dataSpinner;
     private JButton btnConferma;
 
-    public MappaOmbrelloniView() {
+    private boolean isPrenotazione;
+
+    public MappaOmbrelloniView(boolean isPrenotazione) {
+        this.isPrenotazione = isPrenotazione;
         $$$setupUI$$$();
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -40,20 +45,31 @@ public class MappaOmbrelloniView {
         });
     }
 
+    public JFrame apriMappaOmbrelloniView() {
+        JFrame frame = new JFrame("Mappa Ombrelloni");
+        frame.setContentPane(panel);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        frame.setResizable(false);
+        return frame;
+    }
+
     private void stampaOmbrelloni() {
         Date dataSelezionata = (Date) dataSpinner.getValue();
         List<FilaMappaDTO> file = ConfiguraStabilimentoController.visualizzaOmbrelloni(dataSelezionata);
-        mostraPopupMappa(file);
+        mostraPopupMappa(file, dataSelezionata);
     }
 
-    private void mostraPopupMappa(List<FilaMappaDTO> file) {
+    private void mostraPopupMappa(List<FilaMappaDTO> file, Date dataSelezionata) {
         JPanel gridPanel = new JPanel(new GridLayout(0, 10, 10, 10));
         gridPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         for (FilaMappaDTO fila : file) {
             List<OmbrelloneMappaDTO> ombrelloni = fila.getOmbrelloni();
             for (OmbrelloneMappaDTO ombrellone : ombrelloni) {
-                JLabel lblOmbrellone = getLblOmbrellone(ombrellone);
+                JLabel lblOmbrellone = getLblOmbrellone(ombrellone, dataSelezionata);
                 gridPanel.add(lblOmbrellone);
             }
         }
@@ -68,18 +84,34 @@ public class MappaOmbrelloniView {
         );
     }
 
-    private JLabel getLblOmbrellone(OmbrelloneMappaDTO ombrellone) {
+    private JLabel getLblOmbrellone(OmbrelloneMappaDTO ombrellone, Date dataSelezionata) {
         JLabel lblOmbrellone = new JLabel("Omb. " + ombrellone.getNumero(), SwingConstants.CENTER);
         lblOmbrellone.setPreferredSize(new Dimension(40, 40));
         lblOmbrellone.setOpaque(true);
+        lblOmbrellone.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+
         if (ombrellone.isOccupato()) {
             lblOmbrellone.setBackground(new Color(220, 53, 69));
             lblOmbrellone.setForeground(Color.WHITE);
         } else {
             lblOmbrellone.setBackground(new Color(40, 167, 69));
             lblOmbrellone.setForeground(Color.WHITE);
+            if(isPrenotazione) {
+                lblOmbrellone.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                lblOmbrellone.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        Window window = SwingUtilities.getWindowAncestor(lblOmbrellone);
+                        if (window != null) {
+                            window.dispose();
+                        }
+                        SwingUtilities.getWindowAncestor(panel).dispose();
+                        EffettuaPrenotazioneForm formPrenotazione = new EffettuaPrenotazioneForm(dataSelezionata, ombrellone);
+                        formPrenotazione.apriEffettuaPrenotazioneForm();
+                    }
+                });
+            }
         }
-        lblOmbrellone.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
         return lblOmbrellone;
     }
 
@@ -110,18 +142,5 @@ public class MappaOmbrelloniView {
      */
     public JComponent $$$getRootComponent$$$() {
         return panel;
-    }
-
-    // *** TEMPORANEO ***
-    static void main() {
-        JFrame frame = new JFrame();
-        frame.setTitle("Visualizza mappa degli ombrelloni");
-        MappaOmbrelloniView view = new MappaOmbrelloniView();
-        frame.setContentPane(view.panel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
     }
 }

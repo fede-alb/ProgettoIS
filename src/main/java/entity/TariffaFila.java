@@ -15,4 +15,8 @@ public class TariffaFila extends Tariffa {
     public TariffaFila(int importo, PeriodoTariffa periodo) {
         super(importo, periodo);
     }
+
+    public Long getIdTariffaFila() {
+        return idTariffaFila;
+    }
 }
