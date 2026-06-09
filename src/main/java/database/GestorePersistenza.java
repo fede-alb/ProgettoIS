@@ -278,5 +278,32 @@ public class GestorePersistenza {
             em.close();
         }
     }
+    public <T> List<T> cercaPerIntervallo(
+            Class<T> classe,
+            String nomeCampo,
+            Object valoreInizio,
+            Object valoreFine) {
 
+        EntityManager em = JpaUtil.getInstance().getEntityManager();
+
+        try {
+
+            String jpql =
+                    "SELECT e FROM " + classe.getSimpleName() +
+                            " e WHERE e." + nomeCampo +
+                            " >= :inizio AND e." + nomeCampo +
+                            " < :fine";
+
+            TypedQuery<T> query =
+                    em.createQuery(jpql, classe);
+
+            query.setParameter("inizio", valoreInizio);
+            query.setParameter("fine", valoreFine);
+
+            return query.getResultList();
+
+        } finally {
+            em.close();
+        }
+    }
 }

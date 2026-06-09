@@ -3,13 +3,17 @@ package boundary;
 import controller.GestionePrenotazioneController;
 import entity.Prenotazione;
 
+import java.awt.*;
+import java.util.Date;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
+import com.toedter.calendar.JDateChooser;
 
 public class ElencoPrenotazioniView extends JFrame {
 
     private JTable table;
+    private DefaultTableModel model;
 
     public ElencoPrenotazioniView() {
 
@@ -25,24 +29,66 @@ public class ElencoPrenotazioniView extends JFrame {
                 "Prezzo"
         };
 
-        DefaultTableModel model =
-                new DefaultTableModel(colonne, 0);
+        model = new DefaultTableModel(colonne, 0);
 
         GestionePrenotazioneController controller =
                 new GestionePrenotazioneController();
 
-        List<Prenotazione> prenotazioni =
-                controller.consultaElencoPrenotazioni();
+        JPanel pannelloFiltro =
+                new JPanel(new FlowLayout());
 
-        for (Prenotazione p : prenotazioni) {
+        JDateChooser dateChooser =
+                new JDateChooser();
 
-            model.addRow(new Object[]{
-                    p.getIdPrenotazione(),
-                    p.getData(),
-                    p.getStato(),
-                    p.getPrezzo()
-            });
-        }
+        dateChooser.setDateFormatString("dd/MM/yyyy");
+        dateChooser.setPreferredSize(new Dimension(120, 30));
+        dateChooser.getDateEditor()
+                .getUiComponent()
+                .setFont(new Font("Arial", Font.PLAIN, 14));
+
+
+        dateChooser.addPropertyChangeListener("date", e -> {
+
+            Date data = dateChooser.getDate();
+
+            if (data != null) {
+
+                aggiornaTabella(
+                        controller.consultaPrenotazioniPerData(data)
+                );
+            }
+        });
+
+
+
+
+        JButton btnTutte =
+                new JButton("Mostra tutte");
+
+
+        btnTutte.addActionListener(e -> {
+
+            aggiornaTabella(
+                    controller.consultaElencoPrenotazioni()
+            );
+        });
+
+
+        btnTutte.addActionListener(e ->
+
+                aggiornaTabella(
+                        controller.consultaElencoPrenotazioni()
+                )
+        );
+
+
+        pannelloFiltro.add(new JLabel("Data:"));
+        pannelloFiltro.add(dateChooser);
+        pannelloFiltro.add(btnTutte);
+
+        aggiornaTabella(
+                controller.consultaElencoPrenotazioni()
+        );
 
         table = new JTable(model);
 
@@ -67,9 +113,35 @@ public class ElencoPrenotazioniView extends JFrame {
             }
         });
 
-        add(new JScrollPane(table));
+        setLayout(new BorderLayout());
+
+        add(pannelloFiltro, BorderLayout.NORTH);
+
+        add(
+                new JScrollPane(table),
+                BorderLayout.CENTER
+        );
 
         setVisible(true);
     }
+
+
+    private void aggiornaTabella(
+            List<Prenotazione> prenotazioni) {
+
+        model.setRowCount(0);
+
+        for (Prenotazione p : prenotazioni) {
+
+            model.addRow(new Object[]{
+                    p.getIdPrenotazione(),
+                    p.getData(),
+                    p.getStato(),
+                    p.getPrezzo()
+            });
+        }
+    }
+
+
 }
 
