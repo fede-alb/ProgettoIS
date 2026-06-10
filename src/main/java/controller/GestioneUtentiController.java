@@ -9,7 +9,7 @@ public class GestioneUtentiController {
         return RegistroUtenti.getIstanza().accedi(email, password);
     }
 
-    public boolean registrazione(String nome,
+    public static boolean registrazione(String nome,
                                  String cognome,
                                  String email,
                                  String password,
@@ -19,11 +19,11 @@ public class GestioneUtentiController {
                 .registraUtente(nome, cognome, email, password, telefono, ruolo);
     }
 
-    public boolean primoAvvio() {
+    public static boolean primoAvvio() {
         return !RegistroUtenti.getIstanza().esisteAlmenoUnGestore();
     }
 
-    public boolean emailGiaRegistrata(String email) {
+    public static boolean emailGiaRegistrata(String email) {
         return RegistroUtenti.getIstanza().emailGiaRegistrata(email);
     }
 }
