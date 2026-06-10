@@ -1,143 +1,245 @@
 package boundary;
 
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.uiDesigner.core.Spacer;
 import controller.ConfiguraStabilimentoController;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import javax.swing.table.DefaultTableModel;
 
 public class SchermataConfigurazioneStabilimento {
+
+    private final ConfiguraStabilimentoController controller;
 
     private JPanel contentPane;
     private JTextField txtPrimaFila;
     private JTextField txtFilaIntermedia;
     private JTextField txtUltimaFila;
-    private JTable tblServizi;
+    private JTextField txtDescrizioneServizio;
+    private JTextField txtDisponibilitaServizio;
+    private JButton btnAggiungiServizio;
+    private JButton btnEliminaServizio;
     private JButton btnConferma;
     private JLabel lblEsito;
-
-    private ConfiguraStabilimentoController controller;
+    private JTable tblRiepilogoServizi;
+    private DefaultTableModel modelRiepilogo;
 
     public SchermataConfigurazioneStabilimento() {
         controller = new ConfiguraStabilimentoController();
+        costruisciUI();
+        registraEventi();
+        verificaStabilimentoEsistente();
+    }
 
-        $$$setupUI$$$();
+    private void costruisciUI() {
+        contentPane = new JPanel(new BorderLayout(10, 10));
+        contentPane.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[][]{
-                        {"", ""},
-                        {"", ""},
-                        {"", ""}
-                },
-                new String[]{
-                        "Descrizione", "Disponibilita"
-                }
-        ) {
+        // --- Sezione ombrelloni ---
+        JPanel panelOmbrelloni = new JPanel(new GridLayout(3, 2, 8, 8));
+        panelOmbrelloni.setBorder(BorderFactory.createTitledBorder("Numero ombrelloni per fila"));
+
+        panelOmbrelloni.add(new JLabel("Prima fila"));
+        txtPrimaFila = new JTextField();
+        panelOmbrelloni.add(txtPrimaFila);
+
+        panelOmbrelloni.add(new JLabel("Fila intermedia"));
+        txtFilaIntermedia = new JTextField();
+        panelOmbrelloni.add(txtFilaIntermedia);
+
+        panelOmbrelloni.add(new JLabel("Ultima fila"));
+        txtUltimaFila = new JTextField();
+        panelOmbrelloni.add(txtUltimaFila);
+
+        // --- Sezione inserimento servizio ---
+        JPanel panelInserimento = new JPanel(new GridLayout(2, 2, 8, 8));
+        panelInserimento.setBorder(BorderFactory.createTitledBorder("Aggiungi servizio aggiuntivo"));
+
+        panelInserimento.add(new JLabel("Descrizione"));
+        txtDescrizioneServizio = new JTextField();
+        panelInserimento.add(txtDescrizioneServizio);
+
+        panelInserimento.add(new JLabel("Disponibilita (intero > 0)"));
+        txtDisponibilitaServizio = new JTextField();
+        panelInserimento.add(txtDisponibilitaServizio);
+
+        btnAggiungiServizio = new JButton("Aggiungi servizio");
+
+        JPanel panelInserimentoWrapper = new JPanel(new BorderLayout(8, 8));
+        panelInserimentoWrapper.add(panelInserimento, BorderLayout.CENTER);
+        panelInserimentoWrapper.add(btnAggiungiServizio, BorderLayout.SOUTH);
+
+        // --- Tabella riepilogo servizi ---
+        modelRiepilogo = new DefaultTableModel(new String[]{"Descrizione", "Disponibilita"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return true;
-            }
-
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                return String.class;
+                return false;
             }
         };
 
-        tblServizi.setModel(model);
+        tblRiepilogoServizi = new JTable(modelRiepilogo);
+        tblRiepilogoServizi.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane scrollRiepilogo = new JScrollPane(tblRiepilogoServizi);
+        scrollRiepilogo.setPreferredSize(new Dimension(350, 130));
 
-        btnConferma.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                confermaConfigurazione();
+        btnEliminaServizio = new JButton("Elimina servizio selezionato");
+
+        JPanel panelRiepilogo = new JPanel(new BorderLayout(8, 8));
+        panelRiepilogo.setBorder(BorderFactory.createTitledBorder("Servizi aggiunti"));
+        panelRiepilogo.add(scrollRiepilogo, BorderLayout.CENTER);
+        panelRiepilogo.add(btnEliminaServizio, BorderLayout.SOUTH);
+
+        // --- Sezione servizi (inserimento + riepilogo) ---
+        JPanel panelServizi = new JPanel(new BorderLayout(10, 10));
+        panelServizi.add(panelInserimentoWrapper, BorderLayout.NORTH);
+        panelServizi.add(panelRiepilogo, BorderLayout.CENTER);
+
+        // --- Bottone conferma + etichetta esito ---
+        btnConferma = new JButton("Conferma configurazione");
+        lblEsito = new JLabel(" ");
+
+        JPanel panelSud = new JPanel(new BorderLayout(8, 8));
+        panelSud.add(btnConferma, BorderLayout.NORTH);
+        panelSud.add(lblEsito, BorderLayout.SOUTH);
+
+        // --- Assemblaggio ---
+        JPanel panelCentro = new JPanel(new BorderLayout(10, 10));
+        panelCentro.add(panelOmbrelloni, BorderLayout.NORTH);
+        panelCentro.add(panelServizi, BorderLayout.CENTER);
+
+        contentPane.add(panelCentro, BorderLayout.CENTER);
+        contentPane.add(panelSud, BorderLayout.SOUTH);
+    }
+
+    private void registraEventi() {
+        btnAggiungiServizio.addActionListener(e -> aggiungiServizio());
+        btnEliminaServizio.addActionListener(e -> eliminaServizioSelezionato());
+        btnConferma.addActionListener(e -> confermaConfigurazione());
+    }
+
+    private void verificaStabilimentoEsistente() {
+        if (controller.isStabilimentoGiaConfigurato()) {
+            bloccaUI("Lo stabilimento e' gia' stato configurato.");
+        }
+    }
+
+    private void bloccaUI(String messaggio) {
+        txtPrimaFila.setEnabled(false);
+        txtFilaIntermedia.setEnabled(false);
+        txtUltimaFila.setEnabled(false);
+        txtDescrizioneServizio.setEnabled(false);
+        txtDisponibilitaServizio.setEnabled(false);
+        btnAggiungiServizio.setEnabled(false);
+        btnEliminaServizio.setEnabled(false);
+        btnConferma.setEnabled(false);
+        lblEsito.setText(messaggio);
+        lblEsito.setForeground(Color.RED);
+    }
+
+    private void aggiungiServizio() {
+        String descrizione = txtDescrizioneServizio.getText().trim();
+        String disponibilitaText = txtDisponibilitaServizio.getText().trim();
+
+        if (descrizione.isEmpty()) {
+            mostraErrore("Inserisci la descrizione del servizio.");
+            return;
+        }
+
+        if (disponibilitaText.isEmpty()) {
+            mostraErrore("Inserisci la disponibilita del servizio.");
+            return;
+        }
+
+        int disponibilita;
+        try {
+            disponibilita = Integer.parseInt(disponibilitaText);
+        } catch (NumberFormatException ex) {
+            mostraErrore("La disponibilita deve essere un numero intero.");
+            return;
+        }
+
+        if (disponibilita <= 0) {
+            mostraErrore("La disponibilita deve essere maggiore di 0.");
+            return;
+        }
+
+        for (int i = 0; i < modelRiepilogo.getRowCount(); i++) {
+            String descEsistente = modelRiepilogo.getValueAt(i, 0).toString();
+            if (descEsistente.equalsIgnoreCase(descrizione)) {
+                mostraErrore("Esiste gia' un servizio con questa descrizione.");
+                return;
             }
-        });
+        }
+
+        modelRiepilogo.addRow(new Object[]{descrizione, disponibilita});
+        txtDescrizioneServizio.setText("");
+        txtDisponibilitaServizio.setText("");
+        lblEsito.setText("Servizio aggiunto.");
+        lblEsito.setForeground(new Color(0, 130, 0));
+    }
+
+    private void eliminaServizioSelezionato() {
+        int rigaSelezionata = tblRiepilogoServizi.getSelectedRow();
+
+        if (rigaSelezionata == -1) {
+            mostraErrore("Seleziona un servizio dalla tabella per eliminarlo.");
+            return;
+        }
+
+        modelRiepilogo.removeRow(rigaSelezionata);
+        lblEsito.setText("Servizio rimosso.");
+        lblEsito.setForeground(new Color(0, 130, 0));
     }
 
     private void confermaConfigurazione() {
-        if (tblServizi.isEditing()) {
-            tblServizi.getCellEditor().stopCellEditing();
-        }
         String txtP = txtPrimaFila.getText().trim();
         String txtI = txtFilaIntermedia.getText().trim();
         String txtU = txtUltimaFila.getText().trim();
 
         if (txtP.isEmpty() || txtI.isEmpty() || txtU.isEmpty()) {
-            lblEsito.setText("Compila tutti i campi.");
-            lblEsito.setForeground(Color.RED);
+            mostraErrore("Compila tutti i campi del numero di ombrelloni.");
             return;
         }
 
-        int nPrima;
-        int nIntermedia;
-        int nUltima;
+        int nPrima, nIntermedia, nUltima;
 
         try {
             nPrima = Integer.parseInt(txtP);
             nIntermedia = Integer.parseInt(txtI);
             nUltima = Integer.parseInt(txtU);
         } catch (NumberFormatException ex) {
-            lblEsito.setText("Inserisci solo numeri interi.");
-            lblEsito.setForeground(Color.RED);
+            mostraErrore("Inserisci solo numeri interi per gli ombrelloni.");
             return;
         }
 
-        if (nPrima < 0 || nIntermedia < 0 || nUltima < 0) {
-            lblEsito.setText("I numeri degli ombrelloni non possono essere negativi.");
-            lblEsito.setForeground(Color.RED);
+        if (nPrima <= 0 || nIntermedia <= 0 || nUltima <= 0) {
+            mostraErrore("Il numero di ombrelloni deve essere maggiore di 0.");
             return;
         }
 
         Map<String, Integer> servizi = new LinkedHashMap<>();
 
-        for (int i = 0; i < tblServizi.getRowCount(); i++) {
-            Object descObj = tblServizi.getValueAt(i, 0);
-            Object dispObj = tblServizi.getValueAt(i, 1);
-
-            String desc = descObj == null ? "" : descObj.toString().trim();
-            String disp = dispObj == null ? "" : dispObj.toString().trim();
-
-            if (desc.isEmpty() && disp.isEmpty()) {
-                continue;
-            }
-
-            if (desc.isEmpty()) {
-                lblEsito.setText("Descrizione mancante alla riga " + (i + 1));
-                lblEsito.setForeground(Color.RED);
-                return;
-            }
-
-            if (disp.isEmpty()) {
-                lblEsito.setText("Disponibilita mancante per: " + desc);
-                lblEsito.setForeground(Color.RED);
-                return;
-            }
-
-            try {
-                servizi.put(desc, Integer.parseInt(disp));
-            } catch (NumberFormatException ex) {
-                lblEsito.setText("Disponibilita non valida per: " + desc);
-                lblEsito.setForeground(Color.RED);
-                return;
-            }
+        for (int i = 0; i < modelRiepilogo.getRowCount(); i++) {
+            String desc = modelRiepilogo.getValueAt(i, 0).toString();
+            int disp = (int) modelRiepilogo.getValueAt(i, 1);
+            servizi.put(desc, disp);
         }
 
         boolean esito = controller.configuraStabilimento(nPrima, nIntermedia, nUltima, servizi);
 
         if (esito) {
             lblEsito.setText("Stabilimento configurato con successo.");
-            lblEsito.setForeground(Color.GREEN);
+            lblEsito.setForeground(new Color(0, 130, 0));
+            bloccaUI("Stabilimento configurato. Non e' possibile riconfigurare.");
         } else {
-            lblEsito.setText("Errore durante la configurazione.");
-            lblEsito.setForeground(Color.RED);
+            mostraErrore("Errore durante la configurazione. Lo stabilimento potrebbe essere gia' configurato.");
         }
+    }
+
+    private void mostraErrore(String messaggio) {
+        lblEsito.setText(messaggio);
+        lblEsito.setForeground(Color.RED);
     }
 
     public JPanel getContentPane() {
@@ -153,58 +255,5 @@ public class SchermataConfigurazioneStabilimento {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-    }
-
-    /**
-     * Method generated by IntelliJ IDEA GUI Designer
-     * >>> IMPORTANT!! <<<
-     * DO NOT edit this method OR call it in your code!
-     *
-     * @noinspection ALL
-     */
-    private void $$$setupUI$$$() {
-        contentPane = new JPanel();
-        contentPane.setLayout(new GridLayoutManager(7, 5, new Insets(0, 0, 0, 0), -1, -1));
-        final JLabel label1 = new JLabel();
-        label1.setText("Numero ombrelloni prima fila");
-        contentPane.add(label1, new GridConstraints(0, 0, 1, 4, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer1 = new Spacer();
-        contentPane.add(spacer1, new GridConstraints(1, 1, 6, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        txtPrimaFila = new JTextField();
-        txtPrimaFila.setText("");
-        contentPane.add(txtPrimaFila, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        final JLabel label2 = new JLabel();
-        label2.setText("Numero ombrelloni fila intermedia");
-        contentPane.add(label2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label3 = new JLabel();
-        label3.setText("Numero ombrelloni ultima fila");
-        contentPane.add(label3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        txtFilaIntermedia = new JTextField();
-        contentPane.add(txtFilaIntermedia, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        txtUltimaFila = new JTextField();
-        contentPane.add(txtUltimaFila, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
-        contentPane.add(panel1, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        final JLabel label4 = new JLabel();
-        label4.setText("Servizi Aggiuntivi");
-        panel1.add(label4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer2 = new Spacer();
-        panel1.add(spacer2, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        tblServizi = new JTable();
-        contentPane.add(tblServizi, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
-        btnConferma = new JButton();
-        btnConferma.setText("Conferma");
-        contentPane.add(btnConferma, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        lblEsito = new JLabel();
-        lblEsito.setText("In attesa");
-        contentPane.add(lblEsito, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    }
-
-    /**
-     * @noinspection ALL
-     */
-    public JComponent $$$getRootComponent$$$() {
-        return contentPane;
     }
 }

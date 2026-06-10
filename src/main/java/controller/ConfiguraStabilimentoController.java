@@ -50,4 +50,8 @@ public class ConfiguraStabilimentoController {
         }
         return risultatoDTO;
     }
+
+    public boolean isStabilimentoGiaConfigurato() {
+        return Stabilimento.getInstanza().isGiaConfigurato();
+    }
 }
