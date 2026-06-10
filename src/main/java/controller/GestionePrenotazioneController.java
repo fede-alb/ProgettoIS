@@ -2,6 +2,9 @@ package controller;
 
 import database.GestorePersistenza;
 import entity.Prenotazione;
+import entity.Cliente;
+import entity.SessioneUtente;
+import entity.Utente;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +13,17 @@ import java.util.Map;
 public class GestionePrenotazioneController {
 
     private final GestorePersistenza gp = new GestorePersistenza();
+
+    //Ti restituisce quale cliente è loggato in questo momento
+    public Cliente getClienteCorrente() {
+        Utente utenteCorrente = SessioneUtente.getUtenteCorrente();
+
+        if (utenteCorrente instanceof Cliente) {
+            return (Cliente) utenteCorrente;
+        }
+
+        return null;
+    }
 
     public List<Prenotazione> consultaElencoPrenotazioni() {
         return gp.cercaPerCampi(
