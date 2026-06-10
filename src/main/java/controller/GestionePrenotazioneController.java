@@ -4,6 +4,7 @@ import database.GestorePersistenza;
 import entity.*;
 import dto.UtenteDTO;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -44,7 +45,7 @@ public class GestionePrenotazioneController {
                 .toList();
     }
 
-    public List<PrenotazioneDTO> consultaPrenotazioniPerDataDTO(Date giorno) {
+    public List<PrenotazioneDTO> consultaPrenotazioniPerDataDTO(LocalDate giorno) {
 
         List<Prenotazione> prenotazioni =
                 consultaPrenotazioniPerData(giorno);
@@ -62,28 +63,11 @@ public class GestionePrenotazioneController {
     }
 
 
-    public List<Prenotazione> consultaPrenotazioniPerData(Date giorno) {
+    public List<Prenotazione> consultaPrenotazioniPerData(LocalDate giorno) {
 
-        Calendar cal = Calendar.getInstance();
-
-        cal.setTime(giorno);
-
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-
-        Date inizio = cal.getTime();
-
-        cal.add(Calendar.DAY_OF_MONTH, 1);
-
-        Date fine = cal.getTime();
-
-        return gp.cercaPerIntervallo(
+        return gp.cercaPerCampi(
                 Prenotazione.class,
-                "data",
-                inizio,
-                fine
+                Map.of("data", giorno)
         );
     }
 

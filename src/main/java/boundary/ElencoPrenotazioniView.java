@@ -7,6 +7,8 @@ import dto.PrenotazioneDTO;
 import entity.Prenotazione;
 
 import java.awt.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -19,6 +21,7 @@ public class ElencoPrenotazioniView extends JFrame {
     private JButton btnMostraTutte;
     private JScrollPane scrollPanel;
     private JTable tabPrenotazioni;
+    private JPanel pnlDateChooser;
     private DefaultTableModel model;
 
     public ElencoPrenotazioniView() {
@@ -28,6 +31,19 @@ public class ElencoPrenotazioniView extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setContentPane(rootPanel);
+        JDateChooser dateChooser = new JDateChooser();
+
+        dateChooser.setDateFormatString("dd/MM/yyyy");
+        dateChooser.setPreferredSize(new Dimension(120, 25));
+
+
+        pnlDateChooser.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        dateChooser.setPreferredSize(
+                new Dimension(130, 25)
+        );
+
+        pnlDateChooser.add(dateChooser);
         setVisible(true);
 
         String[] colonne = {
@@ -43,11 +59,6 @@ public class ElencoPrenotazioniView extends JFrame {
         GestionePrenotazioneController controller =
                 new GestionePrenotazioneController();
 
-        JPanel pannelloFiltro =
-                new JPanel(new FlowLayout());
-
-        JDateChooser dateChooser =
-                new JDateChooser();
 
         dateChooser.setDateFormatString("dd/MM/yyyy");
         dateChooser.setPreferredSize(new Dimension(120, 30));
@@ -59,18 +70,18 @@ public class ElencoPrenotazioniView extends JFrame {
         dateChooser.addPropertyChangeListener("date", e -> {
 
             Date data = dateChooser.getDate();
+            LocalDate dataLocale =
+                    data.toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate();
 
             if (data != null) {
 
                 aggiornaTabella(
-                        controller.consultaPrenotazioniPerDataDTO(data)
+                        controller.consultaPrenotazioniPerDataDTO(dataLocale)
                 );
             }
         });
-
-
-        JButton btnMostraTutte =
-                new JButton("Mostra tutte");
 
 
         btnMostraTutte.addActionListener(e -> {
@@ -87,11 +98,6 @@ public class ElencoPrenotazioniView extends JFrame {
                         controller.consultaElencoPrenotazioniDTO()
                 )
         );
-
-
-        pannelloFiltro.add(new JLabel("Data:"));
-        pannelloFiltro.add(dateChooser);
-        pannelloFiltro.add(btnMostraTutte);
 
         aggiornaTabella(
                 controller.consultaElencoPrenotazioniDTO()
@@ -159,17 +165,23 @@ public class ElencoPrenotazioniView extends JFrame {
      */
     private void $$$setupUI$$$() {
         rootPanel = new JPanel();
-        rootPanel.setLayout(new GridLayoutManager(4, 2, new Insets(0, 0, 0, 0), -1, -1));
+        rootPanel.setLayout(new GridLayoutManager(4, 3, new Insets(0, 0, 0, 0), -1, -1));
         final JLabel label1 = new JLabel();
         label1.setText("Elenco Prenotazioni");
-        rootPanel.add(label1, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        btnMostraTutte = new JButton();
-        btnMostraTutte.setText("Button");
-        rootPanel.add(btnMostraTutte, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        rootPanel.add(label1, new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         scrollPanel = new JScrollPane();
-        rootPanel.add(scrollPanel, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        rootPanel.add(scrollPanel, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         tabPrenotazioni = new JTable();
         scrollPanel.setViewportView(tabPrenotazioni);
+        final JLabel label2 = new JLabel();
+        label2.setText("Data:");
+        rootPanel.add(label2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        btnMostraTutte = new JButton();
+        btnMostraTutte.setText("Mostra Tutte");
+        rootPanel.add(btnMostraTutte, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        pnlDateChooser = new JPanel();
+        pnlDateChooser.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        rootPanel.add(pnlDateChooser, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
