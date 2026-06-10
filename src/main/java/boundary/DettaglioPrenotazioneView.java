@@ -113,7 +113,5 @@ public class DettaglioPrenotazioneView extends JFrame {
         return rootPanel;
     }
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
-    }
+
 }
