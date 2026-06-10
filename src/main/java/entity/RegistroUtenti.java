@@ -96,7 +96,7 @@ public class RegistroUtenti {
         return gestorePersistenza.salva(nuovoUtente);
     }
 
-    public Utente getUtente(int idUtente) {
-        return gestorePersistenza.trovaPerId(Utente.class, (long) idUtente);
+    public Utente getUtente(long idUtente) {
+        return gestorePersistenza.trovaPerId(Utente.class, idUtente);
     }
 }

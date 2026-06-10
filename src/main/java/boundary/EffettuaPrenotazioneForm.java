@@ -58,11 +58,13 @@ public class EffettuaPrenotazioneForm {
                     }
                 }
 
+                long idClienteCorrente = GestionePrenotazioneController.getIdClienteCorrente();
+
                 boolean successo = GestionePrenotazioneController.effettuaPrenotazione(
                         dataSeleziona,
                         ombrelloneScelto.getNumero(),
                         idServiziSelezionati,
-                        1
+                        idClienteCorrente
                 );
 
                 if (successo) JOptionPane.showMessageDialog(mainPanel, "Prenotazione effettuata con successo!");

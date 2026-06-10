@@ -12,15 +12,15 @@ public class GestionePrenotazioneController {
 
     private final GestorePersistenza gp = new GestorePersistenza();
 
-    //Ti restituisce quale cliente è loggato in questo momento
-    public Cliente getClienteCorrente() {
+    // Ti restituisce quale cliente è loggato in questo momento
+    public static long getIdClienteCorrente() {
         Utente utenteCorrente = SessioneUtente.getUtenteCorrente();
 
         if (utenteCorrente instanceof Cliente) {
-            return (Cliente) utenteCorrente;
+            return utenteCorrente.getIdUtente();
         }
 
-        return null;
+        return 0;
     }
 
     public List<Prenotazione> consultaElencoPrenotazioni() {
@@ -63,7 +63,7 @@ public class GestionePrenotazioneController {
         );
     }
 
-    public static boolean effettuaPrenotazione(Date data, int idOmbrellone, List<Integer> idServizi, int idCliente) {
+    public static boolean effettuaPrenotazione(Date data, int idOmbrellone, List<Integer> idServizi, long idCliente) {
         Stabilimento stabilimento = Stabilimento.getIstanza();
         Ombrellone ombrellone = stabilimento.getOmbrelloneByID(idOmbrellone);
         List<ServizioAggiuntivo> servizi = stabilimento.getServiziByID(idServizi);
