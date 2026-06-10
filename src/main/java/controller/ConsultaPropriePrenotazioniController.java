@@ -30,7 +30,8 @@ public class ConsultaPropriePrenotazioniController {
                     e.getOmbrellone().getFila(),
                     e.getOmbrellone().getNumero(),
                     serviziString,
-                    e.getPrezzo()
+                    e.getPrezzo(),
+                    e.getStato().toString()
             );
             listaDTO.add(dto);
         }

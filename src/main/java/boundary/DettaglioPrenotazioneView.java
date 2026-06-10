@@ -1,5 +1,6 @@
 package boundary;
 
+import dto.PrenotazioneDTO;
 import entity.Prenotazione;
 
 import javax.swing.*;
@@ -23,9 +24,9 @@ public class DettaglioPrenotazioneView extends JFrame {
         ));
 
         panel.add(new JLabel("ID: " + p.getIdPrenotazione()));
-        panel.add(new JLabel("Data: " + p.getData()));
+        //panel.add(new JLabel("Data: " + p.getDataPrenotazione()));
         panel.add(new JLabel("Stato: " + p.getStato()));
-        panel.add(new JLabel("Prezzo: " + p.getPrezzo()));
+        //panel.add(new JLabel("Prezzo: " + p.getCosto()));
         panel.add(new JLabel("Ombrellone: " + p.getOmbrellone().getNumero()));
 
         add(panel);
