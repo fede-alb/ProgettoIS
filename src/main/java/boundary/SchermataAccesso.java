@@ -2,6 +2,7 @@ package boundary;
 
 import controller.GestioneUtentiController;
 import entity.Gestore;
+import entity.SessioneUtente;
 import entity.Utente;
 
 import javax.swing.*;
@@ -92,6 +93,9 @@ public class SchermataAccesso {
             lblEsito.setForeground(Color.RED);
             return;
         }
+
+        // Salvo l'utente autenticato nella sessione corrente dell'applicazione
+        SessioneUtente.impostaUtenteCorrente(utente);
 
         lblEsito.setText("Accesso effettuato con successo.");
         lblEsito.setForeground(new Color(0, 128, 0));
