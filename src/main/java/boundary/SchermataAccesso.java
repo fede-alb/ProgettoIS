@@ -1,9 +1,8 @@
 package boundary;
 
 import controller.GestioneUtentiController;
-import entity.Gestore;
+import dto.UtenteDTO;
 import entity.SessioneUtente;
-import entity.Utente;
 
 import javax.swing.*;
 import java.awt.*;
@@ -86,7 +85,7 @@ public class SchermataAccesso {
             return;
         }
 
-        Utente utente = controller.accesso(email, password);
+        UtenteDTO utente = controller.accesso(email, password);
 
         if (utente == null) {
             lblEsito.setText("Credenziali non valide.");
@@ -94,7 +93,6 @@ public class SchermataAccesso {
             return;
         }
 
-        // Salvo l'utente autenticato nella sessione corrente dell'applicazione
         SessioneUtente.impostaUtenteCorrente(utente);
 
         lblEsito.setText("Accesso effettuato con successo.");
@@ -105,8 +103,7 @@ public class SchermataAccesso {
             finestraCorrente.dispose();
         }
 
-        //chiama il metodo che sarà presente sulle diverse classi mainFrame
-        if (utente instanceof Gestore) {
+        if ("Gestore".equalsIgnoreCase(utente.getRuolo())) {
             MainFrameGestore.apriHomepage();
         } else {
             MainFrameCliente.apriHomepage();

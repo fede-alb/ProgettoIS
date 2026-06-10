@@ -18,10 +18,7 @@ public class SchermataRegistrazione {
     private JLabel lblEsito;
     private JLabel lblAvviso;
 
-    private final GestioneUtentiController controller;
-
     public SchermataRegistrazione() {
-        controller = new GestioneUtentiController();
         inizializzaComponenti();
         configuraPrimoAvvio();
         registraEventi();
@@ -80,7 +77,7 @@ public class SchermataRegistrazione {
     }
 
     private void configuraPrimoAvvio() {
-        if (controller.primoAvvio()) {
+        if (GestioneUtentiController.primoAvvio()) {
             cmbRuolo.setSelectedItem("Gestore");
             cmbRuolo.setEnabled(false);
             lblAvviso.setText("Primo avvio: è necessario registrare prima un gestore.");
@@ -111,13 +108,15 @@ public class SchermataRegistrazione {
             return;
         }
 
-        if (controller.emailGiaRegistrata(email)) {
+        if (GestioneUtentiController.emailGiaRegistrata(email)) {
             lblEsito.setText("Email già registrata.");
             lblEsito.setForeground(Color.RED);
             return;
         }
 
-        boolean esito = controller.registrazione(nome, cognome, email, password, telefono, ruolo);
+        boolean esito = GestioneUtentiController.registrazione(
+                nome, cognome, email, password, telefono, ruolo
+        );
 
         if (esito) {
             lblEsito.setText("Registrazione completata con successo.");
