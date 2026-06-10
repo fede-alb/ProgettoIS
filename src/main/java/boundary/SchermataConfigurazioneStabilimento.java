@@ -25,6 +25,7 @@ public class SchermataConfigurazioneStabilimento {
     private JTable tblRiepilogoServizi;
     private DefaultTableModel modelRiepilogo;
 
+    //Costruttore della schermata
     public SchermataConfigurazioneStabilimento() {
         controller = new ConfiguraStabilimentoController();
         costruisciUI();
@@ -36,7 +37,7 @@ public class SchermataConfigurazioneStabilimento {
         contentPane = new JPanel(new BorderLayout(10, 10));
         contentPane.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        // --- Sezione ombrelloni ---
+        //Sezione ombrelloni
         JPanel panelOmbrelloni = new JPanel(new GridLayout(3, 2, 8, 8));
         panelOmbrelloni.setBorder(BorderFactory.createTitledBorder("Numero ombrelloni per fila"));
 
@@ -52,7 +53,7 @@ public class SchermataConfigurazioneStabilimento {
         txtUltimaFila = new JTextField();
         panelOmbrelloni.add(txtUltimaFila);
 
-        // --- Sezione inserimento servizio ---
+        //Sezione inserimento servizio
         JPanel panelInserimento = new JPanel(new GridLayout(2, 2, 8, 8));
         panelInserimento.setBorder(BorderFactory.createTitledBorder("Aggiungi servizio aggiuntivo"));
 
@@ -60,7 +61,7 @@ public class SchermataConfigurazioneStabilimento {
         txtDescrizioneServizio = new JTextField();
         panelInserimento.add(txtDescrizioneServizio);
 
-        panelInserimento.add(new JLabel("Disponibilita (intero > 0)"));
+        panelInserimento.add(new JLabel("Disponibilita"));
         txtDisponibilitaServizio = new JTextField();
         panelInserimento.add(txtDisponibilitaServizio);
 
@@ -70,7 +71,7 @@ public class SchermataConfigurazioneStabilimento {
         panelInserimentoWrapper.add(panelInserimento, BorderLayout.CENTER);
         panelInserimentoWrapper.add(btnAggiungiServizio, BorderLayout.SOUTH);
 
-        // --- Tabella riepilogo servizi ---
+        //Tabella riepilogo servizi
         modelRiepilogo = new DefaultTableModel(new String[]{"Descrizione", "Disponibilita"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -90,12 +91,12 @@ public class SchermataConfigurazioneStabilimento {
         panelRiepilogo.add(scrollRiepilogo, BorderLayout.CENTER);
         panelRiepilogo.add(btnEliminaServizio, BorderLayout.SOUTH);
 
-        // --- Sezione servizi (inserimento + riepilogo) ---
+        //Sezione servizi (inserimento + riepilogo)
         JPanel panelServizi = new JPanel(new BorderLayout(10, 10));
         panelServizi.add(panelInserimentoWrapper, BorderLayout.NORTH);
         panelServizi.add(panelRiepilogo, BorderLayout.CENTER);
 
-        // --- Bottone conferma + etichetta esito ---
+        //Bottone conferma + etichetta esito
         btnConferma = new JButton("Conferma configurazione");
         lblEsito = new JLabel(" ");
 
@@ -103,7 +104,7 @@ public class SchermataConfigurazioneStabilimento {
         panelSud.add(btnConferma, BorderLayout.NORTH);
         panelSud.add(lblEsito, BorderLayout.SOUTH);
 
-        // --- Assemblaggio ---
+        //Assemblaggio
         JPanel panelCentro = new JPanel(new BorderLayout(10, 10));
         panelCentro.add(panelOmbrelloni, BorderLayout.NORTH);
         panelCentro.add(panelServizi, BorderLayout.CENTER);

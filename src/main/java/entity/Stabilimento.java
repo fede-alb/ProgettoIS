@@ -4,6 +4,7 @@ import database.GestorePersistenza;
 
 import java.util.*;
 
+//Classe singleton
 public class Stabilimento {
     private static Stabilimento istanza;
     private final GestorePersistenza gestorePersistenza;
@@ -12,18 +13,22 @@ public class Stabilimento {
         gestorePersistenza = new GestorePersistenza();
     }
 
-    public static Stabilimento getInstanza() {
+    public static Stabilimento getIstanza() {
         if(istanza == null) {
             istanza = new Stabilimento();
         }
         return istanza;
     }
 
+    //Controlla se è stato configurato, se trova almeno una fila allora sì
     public boolean isGiaConfigurato() {
         List<Fila> file = gestorePersistenza.cercaPerCampi(Fila.class, new HashMap<>());
         return !file.isEmpty();
     }
 
+    //Crea la struttura e salva nel database
+    //Crea 3 file, salva ogni fila e crea il num. di ombrelloni richiesto per ciascuna, collegandoli alla fila giusta
+    //Salva i servizi aggiuntivi passati nella map
     public boolean configuraStabilimento(int nPrimaFila,
                                          int nFilaIntermedia,
                                          int nUltimaFila,
