@@ -7,11 +7,12 @@ import entity.*;
 
 import java.util.*;
 
+//Prepara i dati che la boundary userà
 public class ConfiguraStabilimentoController {
 
     public static List<FilaMappaDTO> visualizzaOmbrelloni(Date data) {
         // Richiedo i dati Entity dallo Stabilimento
-        Stabilimento stabilimento = Stabilimento.getInstanza();
+        Stabilimento stabilimento = Stabilimento.getIstanza();
         Map<Fila, Map<Ombrellone, Boolean>> mappa = stabilimento.visualizzaOmbrelloni(data);
 
         // Costruisco la mappa in DTO da passare al Boundary
@@ -29,16 +30,17 @@ public class ConfiguraStabilimentoController {
         return risultatoDTO;
     }
 
+    //è un intermediario, chiama getIstanza di Stabilimento e restituisce il risultato
     public static boolean configuraStabilimento(int nPrimaFila,
                                          int nFilaIntermedia,
                                          int nUltimaFila,
                                          Map<String, Integer> servizi) {
-        return Stabilimento.getInstanza()
+        return Stabilimento.getIstanza()
                 .configuraStabilimento(nPrimaFila, nFilaIntermedia, nUltimaFila, servizi);
     }
 
     public static List<ServizioAggiuntivoDTO> getServizi() {
-        Stabilimento stabilimento = Stabilimento.getInstanza();
+        Stabilimento stabilimento = Stabilimento.getIstanza();
         List<ServizioAggiuntivo> servizi = stabilimento.getServizi();
         List<ServizioAggiuntivoDTO> risultatoDTO = new ArrayList<>();
         for(ServizioAggiuntivo servizio : servizi) {
@@ -51,7 +53,8 @@ public class ConfiguraStabilimentoController {
         return risultatoDTO;
     }
 
+    //Serve alla GUI
     public boolean isStabilimentoGiaConfigurato() {
-        return Stabilimento.getInstanza().isGiaConfigurato();
+        return Stabilimento.getIstanza().isGiaConfigurato();
     }
 }
