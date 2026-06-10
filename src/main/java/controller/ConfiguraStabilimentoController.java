@@ -54,7 +54,7 @@ public class ConfiguraStabilimentoController {
     }
 
     //Serve alla GUI
-    public boolean isStabilimentoGiaConfigurato() {
+    public static boolean isStabilimentoGiaConfigurato() {
         return Stabilimento.getIstanza().isGiaConfigurato();
     }
 }
