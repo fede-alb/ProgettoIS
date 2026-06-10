@@ -2,6 +2,7 @@ package entity;
 
 import database.GestorePersistenza;
 
+import java.time.LocalDate;
 import java.util.*;
 
 //Classe singleton
@@ -81,9 +82,14 @@ public class Stabilimento {
     }
 
     public Map<Fila, Map<Ombrellone, Boolean>> visualizzaOmbrelloni(Date data) {
+        // Converto Date in LocalDate
+        LocalDate localDate = data.toInstant()
+                .atZone(java.time.ZoneId.systemDefault())
+                .toLocalDate();
+
         // Ottengo tutte le prenotazioni della data selezionata
         Map<String, Object> campi = new HashMap<>();
-        campi.put("data", data);
+        campi.put("data", localDate);
         campi.put("stato", StatoPrenotazione.PRENOTATA);
         List<Prenotazione> prenotazioni = gestorePersistenza.cercaPerCampi(Prenotazione.class, campi);
 
@@ -117,5 +123,45 @@ public class Stabilimento {
             index++;
         }
         return servizi;
+    }
+
+    public  List<ServizioAggiuntivo> getServiziByID(List<Integer> idServizi) {
+        List<ServizioAggiuntivo> servizi = new ArrayList<>();
+        for(int idServizio : idServizi) {
+            servizi.add(gestorePersistenza.trovaPerId(ServizioAggiuntivo.class, (long) idServizio));
+        }
+        return servizi;
+    }
+
+    public Ombrellone getOmbrelloneByID(int idOmbrellone) {
+        return gestorePersistenza.trovaPerId(Ombrellone.class, (long) idOmbrellone);
+    }
+
+    public boolean effettuaPrenotazione(Date data, Ombrellone ombrellone, List<ServizioAggiuntivo> servizi, Cliente cliente) {
+        LocalDate localDate = data.toInstant()
+                .atZone(java.time.ZoneId.systemDefault())
+                .toLocalDate();
+        Set<ServizioAggiuntivo> serviziScelti = new HashSet<>(servizi);
+
+        Prenotazione prenotazione = new Prenotazione(localDate, ombrellone, serviziScelti, cliente);
+        if(isDisponibile(ombrellone, localDate)) {
+            prenotazione.setStato();
+            gestorePersistenza.salva(prenotazione);
+            ServizioMessaggistica sms = new SMSAdapter();
+            sms.inviaMessaggio("Prenotazione effettuata. Data: " + localDate.toString() + ", posto: " + ombrellone.getNumero());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isDisponibile(Ombrellone ombrellone, LocalDate data) {
+        Map<String, Object> campi = new HashMap<>();
+        campi.put("data", data);
+        campi.put("ombrellone", ombrellone);
+        campi.put("stato", StatoPrenotazione.PRENOTATA);
+
+        List<Prenotazione> effettuate = gestorePersistenza.cercaPerCampi(Prenotazione.class, campi);
+        return effettuate.isEmpty();
     }
 }

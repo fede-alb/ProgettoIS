@@ -1,7 +1,8 @@
 package controller;
 
 import database.GestorePersistenza;
-import entity.Prenotazione;
+import entity.*;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -49,5 +50,15 @@ public class GestionePrenotazioneController {
                 inizio,
                 fine
         );
+    }
+
+    public static boolean effettuaPrenotazione(Date data, int idOmbrellone, List<Integer> idServizi, int idCliente) {
+        Stabilimento stabilimento = Stabilimento.getIstanza();
+        Ombrellone ombrellone = stabilimento.getOmbrelloneByID(idOmbrellone);
+        List<ServizioAggiuntivo> servizi = stabilimento.getServiziByID(idServizi);
+        RegistroUtenti registro = RegistroUtenti.getIstanza();
+        Cliente cliente = (Cliente) registro.getUtente(idCliente);
+
+        return stabilimento.effettuaPrenotazione(data, ombrellone, servizi, cliente);
     }
 }

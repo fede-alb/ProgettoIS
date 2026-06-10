@@ -27,13 +27,24 @@ public class MappaOmbrelloniView {
     public MappaOmbrelloniView(boolean isPrenotazione) {
         this.isPrenotazione = isPrenotazione;
         $$$setupUI$$$();
+
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         Date oggi = cal.getTime();
-        SpinnerDateModel dateModel = new SpinnerDateModel(oggi, oggi, null, Calendar.DAY_OF_MONTH);
+
+        Calendar calFine = Calendar.getInstance();
+        calFine.set(Calendar.MONTH, Calendar.SEPTEMBER);
+        calFine.set(Calendar.DAY_OF_MONTH, 30);
+        calFine.set(Calendar.HOUR_OF_DAY, 23);
+        calFine.set(Calendar.MINUTE, 59);
+        calFine.set(Calendar.SECOND, 59);
+        calFine.set(Calendar.MILLISECOND, 999);
+        Date fineSettembre = calFine.getTime();
+
+        SpinnerDateModel dateModel = new SpinnerDateModel(oggi, oggi, fineSettembre, Calendar.DAY_OF_MONTH);
         dataSpinner.setModel(dateModel);
         JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dataSpinner, "dd/MM/yyyy");
         dataSpinner.setEditor(dateEditor);

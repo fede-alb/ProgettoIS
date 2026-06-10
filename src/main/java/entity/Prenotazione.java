@@ -64,6 +64,10 @@ public class Prenotazione {
         return stato;
     }
 
+    public void setStato() {
+        this.stato = StatoPrenotazione.PRENOTATA;
+    }
+
     public int getPrezzo() {
         return prezzo;
     }

@@ -4,14 +4,16 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
 @DiscriminatorValue("Cliente")
 public class Cliente extends Utente {
     @OneToMany(mappedBy = "cliente")
-    private final List<Prenotazione> prenotazioni = new ArrayList<>();
+    private List<Prenotazione> prenotazioni = new ArrayList<>();
 
     public Cliente() {}
 

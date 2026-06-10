@@ -4,12 +4,17 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import controller.ConfiguraStabilimentoController;
+import controller.GestionePrenotazioneController;
 import dto.OmbrelloneMappaDTO;
 import dto.ServizioAggiuntivoDTO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
 
 public class EffettuaPrenotazioneForm {
@@ -22,6 +27,8 @@ public class EffettuaPrenotazioneForm {
     private JButton confermaButton;
     private JPanel panelServizi;
 
+    private List<JCheckBox> listaCheckboxServizi = new ArrayList<>();
+
     public EffettuaPrenotazioneForm(Date dataSeleziona, OmbrelloneMappaDTO ombrelloneScelto) {
         $$$setupUI$$$();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -33,12 +40,40 @@ public class EffettuaPrenotazioneForm {
             JCheckBox checkBox = new JCheckBox(servizio.getDescrizione());
             checkBox.setActionCommand(String.valueOf(servizio.getIdServizioAggiuntivo()));
             pannelloCheckbox.add(checkBox);
+            listaCheckboxServizi.add(checkBox);
         }
         panelServizi.setLayout(new BorderLayout());
         panelServizi.add(pannelloCheckbox, BorderLayout.CENTER);
         panelServizi.revalidate();
         panelServizi.repaint();
-        // CONTINUARE CON LA PRENOTAZIONE E LA CONFERMA DA PARTE DELL'UTENTE
+
+        confermaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<Integer> idServiziSelezionati = new ArrayList<>();
+                for (JCheckBox checkBox : listaCheckboxServizi) {
+                    if (checkBox.isSelected()) {
+                        int idServizio = Integer.parseInt(checkBox.getActionCommand());
+                        idServiziSelezionati.add(idServizio);
+                    }
+                }
+
+                boolean successo = GestionePrenotazioneController.effettuaPrenotazione(
+                        dataSeleziona,
+                        ombrelloneScelto.getNumero(),
+                        idServiziSelezionati,
+                        1
+                );
+
+                if (successo) JOptionPane.showMessageDialog(mainPanel, "Prenotazione effettuata con successo!");
+                else JOptionPane.showMessageDialog(mainPanel, "Errore: l'ombrellone potrebbe essere stato appena prenotato da un altro utente.", "Errore", JOptionPane.ERROR_MESSAGE);
+
+                Window window = SwingUtilities.getWindowAncestor(mainPanel);
+                if (window != null) {
+                    window.dispose();
+                }
+            }
+        });
     }
 
     public void apriEffettuaPrenotazioneForm() {
