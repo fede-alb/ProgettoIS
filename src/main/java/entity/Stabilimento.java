@@ -19,11 +19,16 @@ public class Stabilimento {
         return istanza;
     }
 
+    public boolean isGiaConfigurato() {
+        List<Fila> file = gestorePersistenza.cercaPerCampi(Fila.class, new HashMap<>());
+        return !file.isEmpty();
+    }
+
     public boolean configuraStabilimento(int nPrimaFila,
                                          int nFilaIntermedia,
                                          int nUltimaFila,
                                          Map<String, Integer> servizi) {
-
+        if (isGiaConfigurato()) return false;
         Fila primaFila = new Fila();
         boolean ok = gestorePersistenza.salva(primaFila);
         if (!ok) return false;
