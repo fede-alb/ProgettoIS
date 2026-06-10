@@ -5,6 +5,7 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
 import controller.AnnullaPrenotazioneController;
+import dto.PrenotazioneDTO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -23,8 +24,7 @@ public class AnnullamentoPopup {
     private JButton ConfermaAnnullamento;
     private JButton Indietro;
 
-    private int idPrenotazione;
-    private LocalDate data;
+    private PrenotazioneDTO prenotazioneSelezionata;
     private DefaultTableModel modelTabella;
     private int indiceRiga;
 
@@ -35,9 +35,8 @@ public class AnnullamentoPopup {
         $$$setupUI$$$();
     }
 
-    public AnnullamentoPopup(int idPrenotazione, LocalDate data, DefaultTableModel modelTabella,  int indiceRiga) {
-        this.idPrenotazione = idPrenotazione;
-        this.data = data;
+    public AnnullamentoPopup(PrenotazioneDTO prenotazioneSelezionata, DefaultTableModel modelTabella,  int indiceRiga) {
+        this.prenotazioneSelezionata = prenotazioneSelezionata;
         this.modelTabella = modelTabella;
         this.indiceRiga = indiceRiga;
         ConfermaAnnullamento.addActionListener(new ActionListener() {
@@ -45,7 +44,7 @@ public class AnnullamentoPopup {
             public void actionPerformed(ActionEvent e) {
                 //eseguo il controllo sulla data
                 LocalDate dataOggi = LocalDate.now();
-                LocalDate limiteAnnullamento = data.minusDays(1);
+                LocalDate limiteAnnullamento = prenotazioneSelezionata.getDataPrenotazione().minusDays(1);
 
                 if(dataOggi.isEqual(limiteAnnullamento) || dataOggi.isAfter(limiteAnnullamento)) {
                     JOptionPane.showMessageDialog(
@@ -54,11 +53,24 @@ public class AnnullamentoPopup {
                             "Annullamento Non Consentito",
                             JOptionPane.ERROR_MESSAGE
                     );
+
+                    //chiude la finestra
+                    Window finestra = javax.swing.SwingUtilities.getWindowAncestor((Component) e.getSource());
+                    if (finestra != null) {
+                        finestra.dispose();
+                    }
                 }
                     else{
-                    boolean successo = controller.confermaAnnullamentoPrenotazione();
+
+                    boolean successo = controller.confermaAnnullamentoPrenotazione(prenotazioneSelezionata);
                     JOptionPane.showMessageDialog(null, "Prenotazione annullata con successo.");
                     modelTabella.removeRow(indiceRiga);
+
+                    //chiude la finestra
+                    Window finestra = javax.swing.SwingUtilities.getWindowAncestor((Component) e.getSource());
+                    if (finestra != null) {
+                        finestra.dispose();
+                    }
                     }
 
                 }
@@ -66,7 +78,11 @@ public class AnnullamentoPopup {
         Indietro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Operazione annullata con successo.");
+                //chiude la finestra
+                Window finestra = javax.swing.SwingUtilities.getWindowAncestor((Component) e.getSource());
+                if (finestra != null) {
+                    finestra.dispose();
+                }
             }
         });
     }

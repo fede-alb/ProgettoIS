@@ -2,8 +2,8 @@ package entity;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
 import java.util.Set;
+import java.time.LocalDate;
 
 @Entity
 public class Prenotazione {
@@ -11,7 +11,7 @@ public class Prenotazione {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPrenotazione;
 
-    private Date data;
+    private LocalDate data;
     private int prezzo;
     private StatoPrenotazione stato;
 
@@ -33,7 +33,7 @@ public class Prenotazione {
 
     public Prenotazione() {}
 
-    public Prenotazione(Date data, Ombrellone ombrellone, Set<ServizioAggiuntivo> servizi,  Cliente cliente) {
+    public Prenotazione(LocalDate data, Ombrellone ombrellone, Set<ServizioAggiuntivo> servizi,  Cliente cliente) {
         this.data = data;
         this.ombrellone = ombrellone;
         this.servizi = servizi;
@@ -48,7 +48,7 @@ public class Prenotazione {
         return idPrenotazione;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 

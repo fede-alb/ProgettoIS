@@ -2,6 +2,8 @@ package boundary;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import entity.Ombrellone;
+import entity.Fila;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,6 +35,7 @@ public class ConsultaPropriePrenotazioni {
         createUIComponents();
         panel = new JPanel();
         panel.setLayout(new GridLayoutManager(1, 1, new Insets(10, 20, 10, 20), -1, -1));
+        panel.setPreferredSize(new Dimension(500, 550));
         ScrollPane1 = new JScrollPane();
         panel.add(ScrollPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         ScrollPane1.setViewportView(table1);
@@ -47,11 +50,17 @@ public class ConsultaPropriePrenotazioni {
 
     private void createUIComponents() {
         var colonne = new String[]{"Prenotazione", "Data", "Fila", "Posto", "Servizi Aggiuntivi", "Costo", " "};
-        var dati = new Object[][]{
-                {1, LocalDate.of(2026, 6, 6), "Intermedia", 17, "Parcheggio", "20€", "Annulla"},
-                {2, LocalDate.of(2026, 7, 10), "Prima", 7, "Parcheggio, Cabina", "30€", "Annulla"}
+
+        var dati = new Object[][]{};
+        DefaultTableModel model = new DefaultTableModel(dati, colonne){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                if (column == 6){
+                    return true;
+                }
+                else return false;
+            }
         };
-        DefaultTableModel model = new DefaultTableModel(dati, colonne);
 
         table1 = new JTable(model);
 
@@ -99,6 +108,7 @@ public class ConsultaPropriePrenotazioni {
         @Override
         public Component getTableCellEditorComponent(JTable tab, Object val, boolean isSelected, int riga, int col) {
             this.valoreCella = val;
+            this.rigaCorrente = riga;
             if (val == null) {
                 bottoneEditor.setText(""); //se la cella è vuota non scrive niente
                 bottoneEditor.setEnabled(false); // fa in modo che la cella non sia cliccabile
@@ -115,25 +125,35 @@ public class ConsultaPropriePrenotazioni {
             return this.valoreCella;
         }
     }
-    private void bottoneAnnullaActionPerformed(int rigaCorrente) {
+
+    private void bottoneAnnullaActionPerformed(int rigaSelezionata) {
 
         DefaultTableModel model = (DefaultTableModel) table1.getModel();
-        int rigaSelezionata = table1.getSelectedRow();
 
-        int idPrenotazione = (int) model.getValueAt(rigaSelezionata, 0);
+        //passaggio dei dati e formatting della tabella
+        long idPrenotazione = (long) model.getValueAt(rigaSelezionata, 0);
         LocalDate data = (LocalDate) model.getValueAt(rigaSelezionata, 1);
+        Fila fila =  (Fila) model.getValueAt(rigaSelezionata, 2);
+        int posto = (int)  model.getValueAt(rigaSelezionata, 3);
+        String servizi = (String) model.getValueAt(rigaSelezionata, 4);
+        int costo =  (int) model.getValueAt(rigaSelezionata, 5);
 
-        AnnullamentoPopup pannelloPopup = new AnnullamentoPopup(idPrenotazione, data, model, rigaSelezionata);
+        dto.PrenotazioneDTO dtoSelezioanato = new dto.PrenotazioneDTO(idPrenotazione, data, fila, posto, servizi, costo );
+
+        AnnullamentoPopup pannelloPopup = new AnnullamentoPopup(dtoSelezioanato, model, rigaSelezionata);
 
         //Trova la finestra principale
-       Window finestraMadre = javax.swing.SwingUtilities.getWindowAncestor(table1);
+        Window finestraMadre = SwingUtilities.getWindowAncestor(table1);
 
         // Crea un JDialog
-        JDialog dialog = new JDialog(finestraMadre, "Conferma Annullamento", java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+        JDialog dialog = new JDialog(finestraMadre, "Conferma Annullamento", Dialog.ModalityType.APPLICATION_MODAL);
 
         // Inserisce annullamentoPopup nel JDialog
-        dialog.add(pannelloPopup.getPannelloPrincipale()); // da verificare il funzionamento
+        dialog.add(pannelloPopup.getPannelloPrincipale());
+        //Configurazione grafica del Popup
 
+        dialog.pack(); // Serve per dire a java di prendersi lo spazio necessario
+        dialog.setLocationRelativeTo(finestraMadre); //Centra il Popup sulla finestra madre
         // Mostra la finestra
         dialog.setVisible(true);
     }
