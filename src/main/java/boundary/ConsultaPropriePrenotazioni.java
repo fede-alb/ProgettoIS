@@ -139,7 +139,7 @@ public class ConsultaPropriePrenotazioni {
         String servizi = (String) model.getValueAt(rigaSelezionata, 4);
         int costo =  (int) model.getValueAt(rigaSelezionata, 5);
 
-        dto.PrenotazioneDTO dtoSelezionato = new dto.PrenotazioneDTO(idPrenotazione, data, fila, posto, servizi, costo,stato);
+        dto.PrenotazioneDTO dtoSelezionato = new dto.PrenotazioneDTO(idPrenotazione, data,  fila, posto, servizi, costo,stato);
 
         AnnullamentoPopup pannelloPopup = new AnnullamentoPopup(dtoSelezionato, model, rigaSelezionata);
 

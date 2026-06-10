@@ -63,7 +63,7 @@ public class ElencoPrenotazioniView extends JFrame {
             if (data != null) {
 
                 aggiornaTabella(
-                        controller.consultaPrenotazioniPerData(data)
+                        controller.consultaPrenotazioniPerDataDTO(data)
                 );
             }
         });
@@ -76,7 +76,7 @@ public class ElencoPrenotazioniView extends JFrame {
         btnMostraTutte.addActionListener(e -> {
 
             aggiornaTabella(
-                    controller.consultaElencoPrenotazioni()
+                    controller.consultaElencoPrenotazioniDTO()
             );
         });
 
@@ -84,7 +84,7 @@ public class ElencoPrenotazioniView extends JFrame {
         btnMostraTutte.addActionListener(e ->
 
                 aggiornaTabella(
-                        controller.consultaElencoPrenotazioni()
+                        controller.consultaElencoPrenotazioniDTO()
                 )
         );
 
@@ -94,7 +94,7 @@ public class ElencoPrenotazioniView extends JFrame {
         pannelloFiltro.add(btnMostraTutte);
 
         aggiornaTabella(
-                controller.consultaElencoPrenotazioni()
+                controller.consultaElencoPrenotazioniDTO()
         );
 
 
@@ -111,8 +111,8 @@ public class ElencoPrenotazioniView extends JFrame {
                                     .longValue();
 
 
-                    Prenotazione p =
-                            controller.consultaPrenotazione(idPrenotazione);
+                    PrenotazioneDTO p =
+                            controller.consultaPrenotazioneDTO(idPrenotazione);
 
                     new DettaglioPrenotazioneView(p);
                 }
@@ -123,17 +123,21 @@ public class ElencoPrenotazioniView extends JFrame {
 
 
     private void aggiornaTabella(
-            List<Prenotazione> prenotazioni) {
+            List<PrenotazioneDTO> prenotazioni) {
 
         model.setRowCount(0);
-
-        for (Prenotazione p : prenotazioni) {
-
+        System.out.println("Ricevute: " + prenotazioni.size());
+        for (PrenotazioneDTO p : prenotazioni) {
+            System.out.println(
+                    p.getIdPrenotazione() + " "
+                            + p.getDataPrenotazione() + " "
+                            + p.getStato()
+            );
             model.addRow(new Object[]{
                     p.getIdPrenotazione(),
-                    p.getData(),
+                    p.getDataPrenotazione(),
                     p.getStato(),
-                    p.getPrezzo()
+                    p.getCosto()
             });
         }
     }

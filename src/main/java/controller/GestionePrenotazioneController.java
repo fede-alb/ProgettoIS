@@ -7,6 +7,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import dto.PrenotazioneDTO;
+import java.util.ArrayList;
+import java.util.Set;
 
 public class GestionePrenotazioneController {
 
@@ -28,6 +31,26 @@ public class GestionePrenotazioneController {
                 Prenotazione.class,
                 Map.of()
         );
+    }
+
+    public List<PrenotazioneDTO> consultaElencoPrenotazioniDTO() {
+
+        List<Prenotazione> prenotazioni =
+                consultaElencoPrenotazioni();
+
+        return prenotazioni.stream()
+                .map(this::convertiInDTO)
+                .toList();
+    }
+
+    public List<PrenotazioneDTO> consultaPrenotazioniPerDataDTO(Date giorno) {
+
+        List<Prenotazione> prenotazioni =
+                consultaPrenotazioniPerData(giorno);
+
+        return prenotazioni.stream()
+                .map(this::convertiInDTO)
+                .toList();
     }
 
     public Prenotazione consultaPrenotazione(Long idPrenotazione) {
@@ -71,5 +94,61 @@ public class GestionePrenotazioneController {
         Cliente cliente = (Cliente) registro.getUtente(idCliente);
 
         return stabilimento.effettuaPrenotazione(data, ombrellone, servizi, cliente);
+    }
+
+
+    public PrenotazioneDTO consultaPrenotazioneDTO(Long idPrenotazione) {
+
+        Prenotazione e = consultaPrenotazione(idPrenotazione);
+
+        String serviziString = "N/D";//convertiServiziInStringa(e.getServizi());
+
+        return new PrenotazioneDTO(
+                e.getIdPrenotazione(),
+                e.getData(),
+                //e.getCliente().getNome(),
+                //e.getCliente().getCognome(),
+                e.getOmbrellone().getFila(),
+                e.getOmbrellone().getNumero(),
+                "",
+                //serviziString,
+                e.getPrezzo(),
+                e.getStato().toString()
+        );
+    }
+
+
+    private String convertiServiziInStringa(
+            Set<ServizioAggiuntivo> servizi) {
+
+        if (servizi == null || servizi.isEmpty()) {
+            return "Nessuno";
+        }
+
+        List<String> nomi = new ArrayList<>();
+
+        for (ServizioAggiuntivo s : servizi) {
+            nomi.add(s.getDescrizione());
+        }
+
+        return String.join(", ", nomi);
+    }
+
+    private PrenotazioneDTO convertiInDTO(Prenotazione e) {
+
+        String serviziString = "N/D";
+
+               // convertiServiziInStringa(e.getServizi());
+
+        return new PrenotazioneDTO(
+                e.getIdPrenotazione(),
+                e.getData(),
+                e.getOmbrellone().getFila(),
+                e.getOmbrellone().getNumero(),
+                "",
+                //serviziString,
+                e.getPrezzo(),
+                e.getStato().toString()
+        );
     }
 }

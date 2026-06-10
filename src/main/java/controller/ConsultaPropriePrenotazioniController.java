@@ -27,6 +27,8 @@ public class ConsultaPropriePrenotazioniController {
             PrenotazioneDTO dto = new PrenotazioneDTO(
                     e.getIdPrenotazione(),
                     e.getData(),
+                    //e.getCliente().getNome(),
+                    //e.getCliente().getCognome(),
                     e.getOmbrellone().getFila(),
                     e.getOmbrellone().getNumero(),
                     serviziString,
