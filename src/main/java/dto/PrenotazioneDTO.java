@@ -9,8 +9,8 @@ import java.time.LocalDate;
 public class PrenotazioneDTO {
     private final long idPrenotazione;
     private final LocalDate dataPrenotazione;
-   // private final String nomeCliente;
-    //private final String cognomeCliente;
+    private final String nomeCliente;
+    private final String cognomeCliente;
     private final Fila fila;
     private final int posto;
     private final String serviziAggiuntivi;
@@ -18,12 +18,11 @@ public class PrenotazioneDTO {
     private final String stato;
 
     //definisco il costruttore
-    //,String nomeCliente,String cognomeCliente,
-    public PrenotazioneDTO(long idPrenotazione, LocalDate dataPrenotazione,  Fila fila, int posto, String serviziAggiuntivi, int costo, String stato) {
+    public PrenotazioneDTO(long idPrenotazione, LocalDate dataPrenotazione,String nomeCliente, String cognomeCliente,  Fila fila, int posto, String serviziAggiuntivi, int costo, String stato) {
         this.idPrenotazione = idPrenotazione;
         this.dataPrenotazione = dataPrenotazione;
-       // this.nomeCliente = nomeCliente;
-        //this.cognomeCliente = cognomeCliente;
+        this.nomeCliente = nomeCliente;
+        this.cognomeCliente = cognomeCliente;
         this.fila = fila;
         this.posto = posto;
         this.serviziAggiuntivi = serviziAggiuntivi;
@@ -49,7 +48,7 @@ public class PrenotazioneDTO {
     public String getStato() {
         return stato;
     }
-    //public String getNomeCliente() { return nomeCliente; }
-    //public String getCognomeCliente() { return cognomeCliente; }
+    public String getNomeCliente() { return nomeCliente; }
+    public String getCognomeCliente() { return cognomeCliente; }
 
 }

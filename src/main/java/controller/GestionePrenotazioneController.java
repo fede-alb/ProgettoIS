@@ -106,8 +106,8 @@ public class GestionePrenotazioneController {
         return new PrenotazioneDTO(
                 e.getIdPrenotazione(),
                 e.getData(),
-                //e.getCliente().getNome(),
-                //e.getCliente().getCognome(),
+                e.getCliente().getNome(),
+                e.getCliente().getCognome(),
                 e.getOmbrellone().getFila(),
                 e.getOmbrellone().getNumero(),
                 "",
@@ -143,6 +143,8 @@ public class GestionePrenotazioneController {
         return new PrenotazioneDTO(
                 e.getIdPrenotazione(),
                 e.getData(),
+                e.getCliente().getNome(),
+                e.getCliente().getCognome(),
                 e.getOmbrellone().getFila(),
                 e.getOmbrellone().getNumero(),
                 "",
