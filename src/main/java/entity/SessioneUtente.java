@@ -1,35 +1,27 @@
 package entity;
 
+import dto.UtenteDTO;
+
 public class SessioneUtente {
 
-    private static Utente utenteCorrente;
+    private static UtenteDTO utenteCorrente;
 
-    public static void impostaUtenteCorrente(Utente utente) {
+    private SessioneUtente() {
+    }
+
+    public static void impostaUtenteCorrente(UtenteDTO utente) {
         utenteCorrente = utente;
     }
 
-    public static Utente getUtenteCorrente() {
+    public static UtenteDTO getUtenteCorrente() {
         return utenteCorrente;
     }
 
-    public static Long getIdUtenteCorrente() {
-        if (utenteCorrente == null) return null;
-        return utenteCorrente.getIdUtente();
-    }
-
-    public static boolean isLoggato() {
-        return utenteCorrente != null;
-    }
-
-    //Comodo
-    public static Cliente getClienteCorrente() {
-        if (utenteCorrente instanceof Cliente) {
-            return (Cliente) utenteCorrente;
-        }
-        return null;
-    }
-
-    public static void logout() {
+    public static void pulisciSessione() {
         utenteCorrente = null;
+    }
+
+    public static boolean utenteLoggato() {
+        return utenteCorrente != null;
     }
 }

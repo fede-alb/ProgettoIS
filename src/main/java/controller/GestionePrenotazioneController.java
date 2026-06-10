@@ -2,6 +2,7 @@ package controller;
 
 import database.GestorePersistenza;
 import entity.*;
+import dto.UtenteDTO;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -14,9 +15,9 @@ public class GestionePrenotazioneController {
 
     // Ti restituisce quale cliente è loggato in questo momento
     public static long getIdClienteCorrente() {
-        Utente utenteCorrente = SessioneUtente.getUtenteCorrente();
+        UtenteDTO utenteCorrente = SessioneUtente.getUtenteCorrente();
 
-        if (utenteCorrente instanceof Cliente) {
+        if (utenteCorrente != null && "Cliente".equalsIgnoreCase(utenteCorrente.getRuolo())) {
             return utenteCorrente.getIdUtente();
         }
 
