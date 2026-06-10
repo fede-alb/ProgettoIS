@@ -12,6 +12,17 @@ public class GestionePrenotazioneController {
 
     private final GestorePersistenza gp = new GestorePersistenza();
 
+    //Ti restituisce quale cliente è loggato in questo momento
+    public Cliente getClienteCorrente() {
+        Utente utenteCorrente = SessioneUtente.getUtenteCorrente();
+
+        if (utenteCorrente instanceof Cliente) {
+            return (Cliente) utenteCorrente;
+        }
+
+        return null;
+    }
+
     public List<Prenotazione> consultaElencoPrenotazioni() {
         return gp.cercaPerCampi(
                 Prenotazione.class,
