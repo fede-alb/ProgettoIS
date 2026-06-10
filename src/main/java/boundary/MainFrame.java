@@ -17,6 +17,10 @@ public class MainFrame {
     private JFrame frameMappaOmbrelloni;
     private JFrame frameEffettuaPrenotazione;
 
+    //Configurazione
+    private JButton configuraStabilimentoButton;
+    private JFrame frameConfiguraStabilimento;
+
     public MainFrame() {
 
         mappaOmbrelloniButton.addActionListener(new ActionListener() {
@@ -48,6 +52,27 @@ public class MainFrame {
                 }
             }
         });
+
+        //Configurazione
+        configuraStabilimentoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (frameConfiguraStabilimento == null || !frameConfiguraStabilimento.isVisible()) {
+                    SchermataConfigurazioneStabilimento schermata = new SchermataConfigurazioneStabilimento();
+                    frameConfiguraStabilimento = new JFrame("Configura Stabilimento");
+                    frameConfiguraStabilimento.setContentPane(schermata.getContentPane());
+                    frameConfiguraStabilimento.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frameConfiguraStabilimento.setResizable(false);
+                    frameConfiguraStabilimento.pack();
+                    frameConfiguraStabilimento.setLocationRelativeTo(null);
+                    frameConfiguraStabilimento.setVisible(true);
+                } else {
+                    frameConfiguraStabilimento.toFront();
+                    frameConfiguraStabilimento.requestFocus();
+                }
+            }
+        });
+
     }
 
     static void main() {
@@ -55,8 +80,9 @@ public class MainFrame {
         MainFrame mainFrame = new MainFrame();
         frame.setContentPane(mainFrame.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
+        frame.setResizable(true);
         frame.pack();
+        frame.setSize(700, 200);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
@@ -77,18 +103,21 @@ public class MainFrame {
      */
     private void $$$setupUI$$$() {
         mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
+        mainPanel.setLayout(new GridLayoutManager(4, 2, new Insets(0, 0, 0, 0), -1, -1));
         mainPanel.setPreferredSize(new Dimension(400, 100));
         homepageLabel = new JLabel();
         homepageLabel.setAlignmentX(0.5f);
         homepageLabel.setText("Benvenuto");
         mainPanel.add(homepageLabel, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, 50), null, 0, false));
+        effettuaPrenotazioneButton = new JButton();
+        effettuaPrenotazioneButton.setText("EffettuaPrenotazione");
+        mainPanel.add(effettuaPrenotazioneButton, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         mappaOmbrelloniButton = new JButton();
         mappaOmbrelloniButton.setText("Mappa Ombrelloni");
         mainPanel.add(mappaOmbrelloniButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        effettuaPrenotazioneButton = new JButton();
-        effettuaPrenotazioneButton.setText("EffettuaPrenotazione");
-        mainPanel.add(effettuaPrenotazioneButton, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        configuraStabilimentoButton = new JButton();
+        configuraStabilimentoButton.setText("Configura Stabilimento");
+        mainPanel.add(configuraStabilimentoButton, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
