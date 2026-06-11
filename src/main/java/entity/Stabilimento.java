@@ -102,7 +102,7 @@ public class Stabilimento {
         // Costruisco una mappa di file e coppie <Ombrellone, Prenotato>
         Map<Fila, Map<Ombrellone, Boolean>> mappa = new LinkedHashMap<>();
         for(int i = 1; i < 4; i++) {
-            Fila filaCorrente = new Fila(i, null);
+            Fila filaCorrente = gestorePersistenza.trovaPerId(Fila.class, (long) i);
             Map<Ombrellone, Boolean> ombrelloniFila = new LinkedHashMap<>();
             List<Ombrellone> ombrelloni = gestorePersistenza.cercaPerCampo(Ombrellone.class, "fila", filaCorrente);
             for(Ombrellone ombrellone : ombrelloni) {
