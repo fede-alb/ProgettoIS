@@ -86,7 +86,7 @@ public class GestionePrenotazioneController {
 
         Prenotazione e = consultaPrenotazione(idPrenotazione);
 
-        String serviziString = "N/D";//convertiServiziInStringa(e.getServizi());
+        String serviziString = convertiServiziInStringa(e.getServizi());
 
         return new PrenotazioneDTO(
                 e.getIdPrenotazione(),
@@ -95,35 +95,61 @@ public class GestionePrenotazioneController {
                 e.getCliente().getCognome(),
                 e.getOmbrellone().getFila(),
                 e.getOmbrellone().getNumero(),
-                "",
-                //serviziString,
+                serviziString,
                 e.getPrezzo(),
                 e.getStato().toString()
         );
     }
+        public List<PrenotazioneDTO> ottieniPrenotazioniUtente(long idCliente){
+            List<PrenotazioneDTO> listaDTO = new ArrayList<>();
 
+            List<Prenotazione> entities = Stabilimento.getIstanza().ottieniPrenotazioniDiCliente(idCliente);
 
-    private String convertiServiziInStringa(
-            Set<ServizioAggiuntivo> servizi) {
+            for(Prenotazione e : entities) {
+                String serviziString = convertiServiziInStringa(e.getServizi());
 
-        if (servizi == null || servizi.isEmpty()) {
-            return "Nessuno";
+                PrenotazioneDTO dto = new PrenotazioneDTO(
+                        e.getIdPrenotazione(),
+                        e.getData(),
+                        e.getCliente().getNome(),
+                        e.getCliente().getCognome(),
+                        e.getOmbrellone().getFila(),
+                        e.getOmbrellone().getNumero(),
+                        serviziString,
+                        e.getPrezzo(),
+                        e.getStato().toString()
+                );
+                listaDTO.add(dto);
+            }
+            return listaDTO;
+        }
+        private String convertiServiziInStringa(Set<ServizioAggiuntivo> servizi) {  //da capire come risolvere il problema query lazy
+            /*
+            if (servizi == null || servizi.isEmpty()) return "Nessuno";
+            List<String> nomi = new ArrayList<>();
+            for (ServizioAggiuntivo s : servizi) {
+                nomi.add(s.getDescrizione());
+            }
+            return String.join(", ", nomi);
+
+             */
+            return "nessuno";
         }
 
-        List<String> nomi = new ArrayList<>();
+    public boolean confermaAnnullamentoPrenotazione(PrenotazioneDTO dto) {
 
-        for (ServizioAggiuntivo s : servizi) {
-            nomi.add(s.getDescrizione());
-        }
+        long id = dto.getIdPrenotazione();
 
-        return String.join(", ", nomi);
+        boolean rimosso = Stabilimento.getIstanza().annullaPrenotazione(id);
+        System.out.println("[Database]: Prenotazione rimossa dal sistema.");
+        return true;
     }
+
+
 
     private PrenotazioneDTO convertiInDTO(Prenotazione e) {
 
-        String serviziString = "N/D";
-
-               // convertiServiziInStringa(e.getServizi());
+        String serviziString = convertiServiziInStringa(e.getServizi());
 
         return new PrenotazioneDTO(
                 e.getIdPrenotazione(),
@@ -132,8 +158,7 @@ public class GestionePrenotazioneController {
                 e.getCliente().getCognome(),
                 e.getOmbrellone().getFila(),
                 e.getOmbrellone().getNumero(),
-                "",
-                //serviziString,
+                serviziString,
                 e.getPrezzo(),
                 e.getStato().toString()
         );

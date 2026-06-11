@@ -4,7 +4,7 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
-import controller.AnnullaPrenotazioneController;
+import controller.GestionePrenotazioneController;
 import dto.PrenotazioneDTO;
 
 import javax.swing.*;
@@ -16,7 +16,7 @@ import java.time.LocalDate;
 
 public class AnnullamentoPopup {
 
-    private final AnnullaPrenotazioneController controller = new AnnullaPrenotazioneController();
+    private final GestionePrenotazioneController controller = new GestionePrenotazioneController();
 
     private JPanel annullamentoPanel;
     private JLabel messaggioConferma;
