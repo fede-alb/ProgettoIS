@@ -71,7 +71,7 @@ public class GestionePrenotazioneController {
         );
     }
 
-    public static boolean effettuaPrenotazione(Date data, int idOmbrellone, List<Integer> idServizi, long idCliente) {
+    public static int effettuaPrenotazione(Date data, int idOmbrellone, List<Integer> idServizi, long idCliente) {
         Stabilimento stabilimento = Stabilimento.getIstanza();
         Ombrellone ombrellone = stabilimento.getOmbrelloneByID(idOmbrellone);
         List<ServizioAggiuntivo> servizi = stabilimento.getServiziByID(idServizi);

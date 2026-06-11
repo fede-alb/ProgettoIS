@@ -14,7 +14,7 @@ public class ServizioAggiuntivo {
     private String descrizione;
     private int disponibilita;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "ref_servizio", nullable = false)
     private List<TariffaServizio> tariffe = new ArrayList<>();
 

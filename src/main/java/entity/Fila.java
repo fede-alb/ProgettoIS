@@ -14,7 +14,7 @@ public class Fila {
     @OneToMany(mappedBy = "fila")
     private List<Ombrellone> ombrelloni = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "ref_fila", nullable = false)
     private List<TariffaFila> tariffe = new ArrayList<>();
 

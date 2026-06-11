@@ -4,6 +4,7 @@ import database.GestorePersistenza;
 import org.hibernate.Hibernate;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
 
 //Classe singleton
@@ -138,22 +139,63 @@ public class Stabilimento {
         return gestorePersistenza.trovaPerId(Ombrellone.class, (long) idOmbrellone);
     }
 
-    public boolean effettuaPrenotazione(Date data, Ombrellone ombrellone, List<ServizioAggiuntivo> servizi, Cliente cliente) {
+    public int effettuaPrenotazione(Date data, Ombrellone ombrellone, List<ServizioAggiuntivo> servizi, Cliente cliente) {
         LocalDate localDate = data.toInstant()
                 .atZone(java.time.ZoneId.systemDefault())
                 .toLocalDate();
         Set<ServizioAggiuntivo> serviziScelti = new HashSet<>(servizi);
 
         Prenotazione prenotazione = new Prenotazione(localDate, ombrellone, serviziScelti, cliente);
+        prenotazione.setPrezzo(calcolaTariffa(localDate, ombrellone, serviziScelti));
         if(isDisponibile(ombrellone, localDate)) {
             prenotazione.setStato();
             gestorePersistenza.salva(prenotazione);
             ServizioMessaggistica sms = new SMSAdapter();
             sms.inviaMessaggio("Prenotazione effettuata. Data: " + localDate.toString() + ", posto: " + ombrellone.getNumero());
-            return true;
+            return prenotazione.getPrezzo();
         } else {
-            return false;
+            return 0;
         }
+    }
+
+    private int calcolaTariffa(LocalDate data, Ombrellone ombrellone, Set<ServizioAggiuntivo> serviziScelti) {
+        int prezzo = 0;
+        PeriodoTariffa periodoTariffa = null;
+        if(data.getMonth() == Month.JULY || data.getMonth() == Month.AUGUST) {
+            periodoTariffa = PeriodoTariffa.ALTA_STAGIONE;
+        } else {
+            periodoTariffa = PeriodoTariffa.BASSA_STAGIONE;
+        }
+
+        // Tariffa Fila
+        Fila filaDB = gestorePersistenza.trovaPerId(Fila.class, (long) ombrellone.getFila().getPosizione());
+        TariffaFila tariffaFila = null;
+        for(TariffaFila t : filaDB.getTariffe()) {
+            if(t.getPeriodo().equals(periodoTariffa)) {
+                tariffaFila = t;
+            }
+        }
+        prezzo += tariffaFila.getImporto();
+
+        // Se non sono stati selezionati servizi, la funzione termina qui
+        if(serviziScelti.isEmpty()) {
+            return prezzo;
+        }
+
+        // Tariffa Servizi
+        ServizioAggiuntivo servizioDB = null;
+        TariffaServizio tariffaServizio = null;
+        for(ServizioAggiuntivo servizio : serviziScelti) {
+            servizioDB = gestorePersistenza.trovaPerId(ServizioAggiuntivo.class, servizio.getId());
+            for(TariffaServizio t : servizioDB.getTariffe()) {
+                if(t.getPeriodo().equals(periodoTariffa)) {
+                    tariffaServizio = t;
+                }
+            }
+        }
+        prezzo += tariffaServizio.getImporto();
+
+        return prezzo;
     }
 
     private boolean isDisponibile(Ombrellone ombrellone, LocalDate data) {

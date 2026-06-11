@@ -38,9 +38,7 @@ public class Prenotazione {
         this.ombrellone = ombrellone;
         this.servizi = servizi;
         this.stato = StatoPrenotazione.PENDING;
-        this.prezzo = 50; // Prezzo casuale, per ora
-        // NOTA: Chiamerà il metodo privato calcolaTariffa()
-        // calcolaTariffa() { this.prezzo = ...; }
+        this.prezzo = 0;
         this.cliente = cliente;
     }
 
@@ -70,6 +68,10 @@ public class Prenotazione {
 
     public int getPrezzo() {
         return prezzo;
+    }
+
+    public void setPrezzo(int prezzo) {
+        this.prezzo = prezzo;
     }
 
     public Cliente getCliente() {

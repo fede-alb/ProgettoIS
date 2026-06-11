@@ -22,7 +22,7 @@ public class MainAggiungiTariffe {
         PeriodoTariffa estate = PeriodoTariffa.ALTA_STAGIONE;
         PeriodoTariffa inverno = PeriodoTariffa.BASSA_STAGIONE;
 
-        /* Tariffe fila (da fare una sola volta)
+        // Tariffe fila (da fare una sola volta)
         List<Fila> fileRecuperate = em.createQuery(
                 "SELECT f FROM Fila f LEFT JOIN FETCH f.tariffe", Fila.class
         ).getResultList();
@@ -32,20 +32,10 @@ public class MainAggiungiTariffe {
             Fila fila = fileRecuperate.get(i);
             fila.aggiungiTariffa(tariffaFilaEstate);
             fila.aggiungiTariffa(tariffaFilaInverno);
-            try {
-                em.getTransaction().begin();
-                em.merge(fila);
-                em.getTransaction().commit();
-            } catch (Exception ex) {
-                em.getTransaction().rollback();
-            } finally {
-                em.close();
-                emf.close();
-            }
+            gestorePersistenza.aggiorna(fila);
         }
-         */
 
-        /* Tariffe servizi (da fare una sola volta)
+        // Tariffe servizi (da fare una sola volta)
         List<ServizioAggiuntivo> serviziRecuperati = em.createQuery(
                 "SELECT s FROM ServizioAggiuntivo s LEFT JOIN FETCH s.tariffe", ServizioAggiuntivo.class
         ).getResultList();
@@ -55,18 +45,8 @@ public class MainAggiungiTariffe {
             ServizioAggiuntivo servizio = serviziRecuperati.get(i);
             servizio.aggiungiTariffa(tariffaServizioEstate);
             servizio.aggiungiTariffa(tariffaServizioInverno);
-            try {
-                em.getTransaction().begin();
-                em.merge(servizio);
-                em.getTransaction().commit();
-            } catch (Exception ex) {
-                em.getTransaction().rollback();
-            } finally {
-                em.close();
-                emf.close();
-            }
+            gestorePersistenza.aggiorna(servizio);
         }
-        */
 
         em.close();
         emf.close();

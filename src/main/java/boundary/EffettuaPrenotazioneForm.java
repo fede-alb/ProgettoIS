@@ -60,15 +60,18 @@ public class EffettuaPrenotazioneForm {
 
                 long idClienteCorrente = GestionePrenotazioneController.getIdClienteCorrente();
 
-                boolean successo = GestionePrenotazioneController.effettuaPrenotazione(
+                int prezzoPrenotazione = GestionePrenotazioneController.effettuaPrenotazione(
                         dataSeleziona,
                         ombrelloneScelto.getNumero(),
                         idServiziSelezionati,
                         idClienteCorrente
                 );
 
-                if (successo) JOptionPane.showMessageDialog(mainPanel, "Prenotazione effettuata con successo!");
-                else JOptionPane.showMessageDialog(mainPanel, "Errore: l'ombrellone potrebbe essere stato appena prenotato da un altro utente.", "Errore", JOptionPane.ERROR_MESSAGE);
+                if (prezzoPrenotazione != 0) {
+                    JOptionPane.showMessageDialog(mainPanel, "Prenotazione effettuata con successo!\nPrezzo: " + prezzoPrenotazione + ",00 €");
+                } else {
+                    JOptionPane.showMessageDialog(mainPanel, "Errore: l'ombrellone potrebbe essere stato appena prenotato da un altro utente.", "Errore", JOptionPane.ERROR_MESSAGE);
+                }
 
                 Window window = SwingUtilities.getWindowAncestor(mainPanel);
                 if (window != null) {
