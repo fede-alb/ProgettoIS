@@ -1,6 +1,9 @@
 package eseguibile;
 
 import boundary.ConsultaPropriePrenotazioni;
+import controller.GestionePrenotazioneController;
+import entity.Cliente;
+
 import javax.swing.*;
 
 public class MainAnnullaPrenotazione {
@@ -10,8 +13,9 @@ public class MainAnnullaPrenotazione {
             //Creo il contenitore
             JFrame frame = new JFrame("Sistema Gestione Prenotazioni");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-            ConsultaPropriePrenotazioni schermataTabella = new ConsultaPropriePrenotazioni();
+            long idClienteCorrente = 1;
+            //long idClienteCorrente = GestionePrenotazioneController.getIdClienteCorrente();
+            ConsultaPropriePrenotazioni schermataTabella = new ConsultaPropriePrenotazioni(idClienteCorrente);
             frame.setContentPane(schermataTabella.$$$getRootComponent$$$());
 
             //Configuro la finestra

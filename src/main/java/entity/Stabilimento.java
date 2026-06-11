@@ -1,6 +1,7 @@
 package entity;
 
 import database.GestorePersistenza;
+import org.hibernate.Hibernate;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -163,5 +164,29 @@ public class Stabilimento {
 
         List<Prenotazione> effettuate = gestorePersistenza.cercaPerCampi(Prenotazione.class, campi);
         return effettuate.isEmpty();
+    }
+
+    public List<Prenotazione> ottieniPrenotazioniDiCliente(long idCliente) {
+    Cliente clienteAttuale = gestorePersistenza.trovaPerId(Cliente.class, idCliente);
+
+        Map<String, Object> campi = new HashMap<>();
+        campi.put("cliente", clienteAttuale);
+
+        List<Prenotazione> prenotazioni = gestorePersistenza.cercaPerCampi(Prenotazione.class, campi);
+
+        return prenotazioni;
+    }
+    public boolean annullaPrenotazione(long idPrenotazione){
+        Prenotazione prenotazione = gestorePersistenza.trovaPerId(Prenotazione.class, (long) idPrenotazione);
+
+        if(prenotazione == null) return false;
+
+        //dovremmo implementare anche lo stato annullata? in caso possiamo
+        //cambiare anche lo stato stesso con
+        //prenotazione.setStato(StatoPrenotazione.ANNULLATA);
+        boolean update = gestorePersistenza.elimina(Prenotazione.class, idPrenotazione);
+
+        return update;
+
     }
 }
