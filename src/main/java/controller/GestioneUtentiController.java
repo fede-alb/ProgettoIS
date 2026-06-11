@@ -7,7 +7,7 @@ import entity.Utente;
 
 public class GestioneUtentiController {
 
-    public UtenteDTO accesso(String email, String password) {
+    public static UtenteDTO accesso(String email, String password) {
         Utente utente = RegistroUtenti.getIstanza().accedi(email, password);
 
         if (utente == null) {

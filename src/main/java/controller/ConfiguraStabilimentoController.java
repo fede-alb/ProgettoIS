@@ -1,7 +1,7 @@
 package controller;
 
-import dto.FilaMappaDTO;
-import dto.OmbrelloneMappaDTO;
+import dto.FilaDTO;
+import dto.OmbrelloneDTO;
 import dto.ServizioAggiuntivoDTO;
 import entity.*;
 
@@ -10,20 +10,20 @@ import java.util.*;
 //Prepara i dati che la boundary userà
 public class ConfiguraStabilimentoController {
 
-    public static List<FilaMappaDTO> visualizzaOmbrelloni(Date data) {
+    public static List<FilaDTO> visualizzaOmbrelloni(Date data) {
         // Richiedo i dati Entity dallo Stabilimento
         Stabilimento stabilimento = Stabilimento.getIstanza();
         Map<Fila, Map<Ombrellone, Boolean>> mappa = stabilimento.visualizzaOmbrelloni(data);
 
         // Costruisco la mappa in DTO da passare al Boundary
-        List<FilaMappaDTO> risultatoDTO = new ArrayList<>();
+        List<FilaDTO> risultatoDTO = new ArrayList<>();
         for (Map.Entry<Fila, Map<Ombrellone, Boolean>> entryFila : mappa.entrySet()) {
             Fila fila = entryFila.getKey();
-            FilaMappaDTO filaDTO = new FilaMappaDTO(fila.getPosizione());
+            FilaDTO filaDTO = new FilaDTO(fila.getPosizione());
             for (Map.Entry<Ombrellone, Boolean> entryOmb : entryFila.getValue().entrySet()) {
                 Ombrellone ombrellone = entryOmb.getKey();
                 Boolean occupato = entryOmb.getValue();
-                filaDTO.addOmbrellone(new OmbrelloneMappaDTO(ombrellone.getNumero(), occupato));
+                filaDTO.addOmbrellone(new OmbrelloneDTO(ombrellone.getNumero(), occupato));
             }
             risultatoDTO.add(filaDTO);
         }

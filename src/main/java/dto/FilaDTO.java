@@ -3,11 +3,11 @@ package dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilaMappaDTO {
+public class FilaDTO {
     private final int posizione;
-    private final List<OmbrelloneMappaDTO> ombrelloni = new ArrayList<>();
+    private final List<OmbrelloneDTO> ombrelloni = new ArrayList<>();
 
-    public FilaMappaDTO(int posizione) {
+    public FilaDTO(int posizione) {
         this.posizione = posizione;
     }
 
@@ -15,11 +15,11 @@ public class FilaMappaDTO {
         return posizione;
     }
 
-    public List<OmbrelloneMappaDTO> getOmbrelloni() {
+    public List<OmbrelloneDTO> getOmbrelloni() {
         return ombrelloni;
     }
 
-    public void addOmbrellone(OmbrelloneMappaDTO ombrellone) {
+    public void addOmbrellone(OmbrelloneDTO ombrellone) {
         ombrelloni.add(ombrellone);
     }
 }

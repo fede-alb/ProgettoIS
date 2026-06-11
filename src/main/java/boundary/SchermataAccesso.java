@@ -18,10 +18,7 @@ public class SchermataAccesso {
     private JLabel lblTitolo;
     private JLabel lblSottotitolo;
 
-    private final GestioneUtentiController controller;
-
     public SchermataAccesso() {
-        controller = new GestioneUtentiController();
         inizializzaComponenti();
         registraEventi();
     }
@@ -85,7 +82,7 @@ public class SchermataAccesso {
             return;
         }
 
-        UtenteDTO utente = controller.accesso(email, password);
+        UtenteDTO utente = GestioneUtentiController.accesso(email, password);
 
         if (utente == null) {
             lblEsito.setText("Credenziali non valide.");

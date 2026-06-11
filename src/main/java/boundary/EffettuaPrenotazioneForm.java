@@ -5,7 +5,7 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import controller.ConfiguraStabilimentoController;
 import controller.GestionePrenotazioneController;
-import dto.OmbrelloneMappaDTO;
+import dto.OmbrelloneDTO;
 import dto.ServizioAggiuntivoDTO;
 
 import javax.swing.*;
@@ -29,7 +29,7 @@ public class EffettuaPrenotazioneForm {
 
     private List<JCheckBox> listaCheckboxServizi = new ArrayList<>();
 
-    public EffettuaPrenotazioneForm(Date dataSeleziona, OmbrelloneMappaDTO ombrelloneScelto) {
+    public EffettuaPrenotazioneForm(Date dataSeleziona, OmbrelloneDTO ombrelloneScelto) {
         $$$setupUI$$$();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         lblDataSelezionata.setText(formatter.format(dataSeleziona));

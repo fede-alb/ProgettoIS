@@ -1,10 +1,10 @@
 package dto;
 
-public class OmbrelloneMappaDTO {
+public class OmbrelloneDTO {
     private final int numero;
     private final boolean occupato;
 
-    public OmbrelloneMappaDTO(int numero,  boolean occupato) {
+    public OmbrelloneDTO(int numero, boolean occupato) {
         this.numero = numero;
         this.occupato = occupato;
     }

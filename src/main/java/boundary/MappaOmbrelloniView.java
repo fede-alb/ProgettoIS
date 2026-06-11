@@ -4,8 +4,8 @@ import controller.ConfiguraStabilimentoController;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import dto.FilaMappaDTO;
-import dto.OmbrelloneMappaDTO;
+import dto.FilaDTO;
+import dto.OmbrelloneDTO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -69,23 +69,26 @@ public class MappaOmbrelloniView {
 
     private void stampaOmbrelloni() {
         Date dataSelezionata = (Date) dataSpinner.getValue();
-        List<FilaMappaDTO> file = ConfiguraStabilimentoController.visualizzaOmbrelloni(dataSelezionata);
+        List<FilaDTO> file = ConfiguraStabilimentoController.visualizzaOmbrelloni(dataSelezionata);
         mostraPopupMappa(file, dataSelezionata);
     }
 
-    private void mostraPopupMappa(List<FilaMappaDTO> file, Date dataSelezionata) {
-        JPanel gridPanel = new JPanel(new GridLayout(0, 10, 10, 10));
-        gridPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    private void mostraPopupMappa(List<FilaDTO> file, Date dataSelezionata) {
+        JPanel mapPanel = new JPanel();
+        mapPanel.setLayout(new BoxLayout(mapPanel, BoxLayout.Y_AXIS));
 
-        for (FilaMappaDTO fila : file) {
-            List<OmbrelloneMappaDTO> ombrelloni = fila.getOmbrelloni();
-            for (OmbrelloneMappaDTO ombrellone : ombrelloni) {
+        for (FilaDTO fila : file) {
+            JPanel rowPanel = new JPanel();
+            rowPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+            List<OmbrelloneDTO> ombrelloni = fila.getOmbrelloni();
+            for (OmbrelloneDTO ombrellone : ombrelloni) {
                 JLabel lblOmbrellone = getLblOmbrellone(ombrellone, dataSelezionata);
-                gridPanel.add(lblOmbrellone);
+                rowPanel.add(lblOmbrellone);
             }
+            mapPanel.add(rowPanel);
         }
 
-        JScrollPane scrollPane = new JScrollPane(gridPanel);
+        JScrollPane scrollPane = new JScrollPane(mapPanel);
         scrollPane.setPreferredSize(new Dimension(1000, 400));
         JOptionPane.showMessageDialog(
                 this.panel,
@@ -95,9 +98,9 @@ public class MappaOmbrelloniView {
         );
     }
 
-    private JLabel getLblOmbrellone(OmbrelloneMappaDTO ombrellone, Date dataSelezionata) {
+    private JLabel getLblOmbrellone(OmbrelloneDTO ombrellone, Date dataSelezionata) {
         JLabel lblOmbrellone = new JLabel("Omb. " + ombrellone.getNumero(), SwingConstants.CENTER);
-        lblOmbrellone.setPreferredSize(new Dimension(40, 40));
+        lblOmbrellone.setPreferredSize(new Dimension(100, 100));
         lblOmbrellone.setOpaque(true);
         lblOmbrellone.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 
