@@ -13,7 +13,7 @@ public class MainAnnullaPrenotazione {
             //Creo il contenitore
             JFrame frame = new JFrame("Sistema Gestione Prenotazioni");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            long idClienteCorrente = 1;
+            long idClienteCorrente = 2;
             //long idClienteCorrente = GestionePrenotazioneController.getIdClienteCorrente();
             ConsultaPropriePrenotazioni schermataTabella = new ConsultaPropriePrenotazioni(idClienteCorrente);
             frame.setContentPane(schermataTabella.$$$getRootComponent$$$());

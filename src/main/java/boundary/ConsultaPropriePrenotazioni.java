@@ -37,7 +37,7 @@ public class ConsultaPropriePrenotazioni {
             model.addRow(new Object[]{
                     p.getIdPrenotazione(),
                     p.getDataPrenotazione(),
-                    p.getFila(),
+                    p.getFila().getPosizione(),
                     p.getPosto(),
                     p.getServiziAggiuntivi(),
                     p.getCosto(),
