@@ -1,13 +1,11 @@
 package entity;
 
 import database.GestorePersistenza;
-import org.hibernate.Hibernate;
 
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
 
-//Classe singleton
 public class Stabilimento {
     private static Stabilimento istanza;
     private final GestorePersistenza gestorePersistenza;
@@ -23,51 +21,30 @@ public class Stabilimento {
         return istanza;
     }
 
-    //Controlla se è stato configurato, se trova almeno una fila allora sì
     public boolean isGiaConfigurato() {
         List<Fila> file = gestorePersistenza.cercaPerCampi(Fila.class, new HashMap<>());
         return !file.isEmpty();
     }
 
-    //Crea la struttura e salva nel database
-    //Crea 3 file, salva ogni fila e crea il num. di ombrelloni richiesto per ciascuna, collegandoli alla fila giusta
-    //Salva i servizi aggiuntivi passati nella map
     public boolean configuraStabilimento(int nPrimaFila,
                                          int nFilaIntermedia,
                                          int nUltimaFila,
                                          Map<String, Integer> servizi) {
         if (isGiaConfigurato()) return false;
-        Fila primaFila = new Fila();
-        boolean ok = gestorePersistenza.salva(primaFila);
-        if (!ok) return false;
 
-        for (int i = 0; i < nPrimaFila; i++) {
-            Ombrellone ombrellone = new Ombrellone(primaFila);
-            primaFila.aggiungiOmbrellone(ombrellone);
-            ok = gestorePersistenza.salva(ombrellone);
-            if (!ok) return false;
-        }
+        List<Integer> nOmbrelloniFila = new ArrayList<>();
+        nOmbrelloniFila.add(nPrimaFila);
+        nOmbrelloniFila.add(nFilaIntermedia);
+        nOmbrelloniFila.add(nUltimaFila);
 
-        Fila filaIntermedia = new Fila();
-        ok = gestorePersistenza.salva(filaIntermedia);
-        if (!ok) return false;
-
-        for (int i = 0; i < nFilaIntermedia; i++) {
-            Ombrellone ombrellone = new Ombrellone(filaIntermedia);
-            filaIntermedia.aggiungiOmbrellone(ombrellone);
-            ok = gestorePersistenza.salva(ombrellone);
-            if (!ok) return false;
-        }
-
-        Fila ultimaFila = new Fila();
-        ok = gestorePersistenza.salva(ultimaFila);
-        if (!ok) return false;
-
-        for (int i = 0; i < nUltimaFila; i++) {
-            Ombrellone ombrellone = new Ombrellone(ultimaFila);
-            ultimaFila.aggiungiOmbrellone(ombrellone);
-            ok = gestorePersistenza.salva(ombrellone);
-            if (!ok) return false;
+        for(int f = 0; f < 3; f++) {
+            Fila filaCorrente = new Fila();
+            if(!gestorePersistenza.salva(filaCorrente)) return false;
+            for (int i = 0; i < nOmbrelloniFila.get(f); i++) {
+                Ombrellone ombrellone = new Ombrellone(filaCorrente);
+                filaCorrente.aggiungiOmbrellone(ombrellone);
+                if(!gestorePersistenza.salva(ombrellone)) return false;
+            }
         }
 
         for (Map.Entry<String, Integer> entry : servizi.entrySet()) {
@@ -76,32 +53,27 @@ public class Stabilimento {
                     entry.getValue(),
                     new ArrayList<>()
             );
-            ok = gestorePersistenza.salva(servizio);
-            if (!ok) return false;
+            if(!gestorePersistenza.salva(servizio)) return false;
         }
 
         return true;
     }
 
     public Map<Fila, Map<Ombrellone, Boolean>> visualizzaOmbrelloni(Date data) {
-        // Converto Date in LocalDate
         LocalDate localDate = data.toInstant()
                 .atZone(java.time.ZoneId.systemDefault())
                 .toLocalDate();
 
-        // Ottengo tutte le prenotazioni della data selezionata
         Map<String, Object> campi = new HashMap<>();
         campi.put("data", localDate);
         campi.put("stato", StatoPrenotazione.PRENOTATA);
         List<Prenotazione> prenotazioni = gestorePersistenza.cercaPerCampi(Prenotazione.class, campi);
 
-        // Salvo gli ombrelloni prenotati
         List<Ombrellone> prenotati = new ArrayList<>();
         for(Prenotazione prenotazione : prenotazioni) {
             prenotati.add(prenotazione.getOmbrellone());
         }
 
-        // Costruisco una mappa di file e coppie <Ombrellone, Prenotato>
         Map<Fila, Map<Ombrellone, Boolean>> mappa = new LinkedHashMap<>();
         for(int i = 1; i < 4; i++) {
             Fila filaCorrente = gestorePersistenza.trovaPerId(Fila.class, (long) i);
@@ -127,7 +99,7 @@ public class Stabilimento {
         return servizi;
     }
 
-    public  List<ServizioAggiuntivo> getServiziByID(List<Integer> idServizi) {
+    public List<ServizioAggiuntivo> getServiziByID(List<Integer> idServizi) {
         List<ServizioAggiuntivo> servizi = new ArrayList<>();
         for(int idServizio : idServizi) {
             servizi.add(gestorePersistenza.trovaPerId(ServizioAggiuntivo.class, (long) idServizio));
@@ -167,7 +139,6 @@ public class Stabilimento {
             periodoTariffa = PeriodoTariffa.BASSA_STAGIONE;
         }
 
-        // Tariffa Fila
         Fila filaDB = gestorePersistenza.trovaPerId(Fila.class, (long) ombrellone.getFila().getPosizione());
         TariffaFila tariffaFila = null;
         for(TariffaFila t : filaDB.getTariffe()) {
@@ -175,14 +146,13 @@ public class Stabilimento {
                 tariffaFila = t;
             }
         }
+        assert tariffaFila != null;
         prezzo += tariffaFila.getImporto();
 
-        // Se non sono stati selezionati servizi, la funzione termina qui
         if(serviziScelti.isEmpty()) {
             return prezzo;
         }
 
-        // Tariffa Servizi
         ServizioAggiuntivo servizioDB = null;
         TariffaServizio tariffaServizio = null;
         for(ServizioAggiuntivo servizio : serviziScelti) {
@@ -193,6 +163,7 @@ public class Stabilimento {
                 }
             }
         }
+        assert tariffaServizio != null;
         prezzo += tariffaServizio.getImporto();
 
         return prezzo;
@@ -209,26 +180,15 @@ public class Stabilimento {
     }
 
     public List<Prenotazione> ottieniPrenotazioniDiCliente(long idCliente) {
-    Cliente clienteAttuale = gestorePersistenza.trovaPerId(Cliente.class, idCliente);
+        Cliente clienteAttuale = gestorePersistenza.trovaPerId(Cliente.class, idCliente);
 
         Map<String, Object> campi = new HashMap<>();
         campi.put("cliente", clienteAttuale);
-
-        List<Prenotazione> prenotazioni = gestorePersistenza.cercaPerCampi(Prenotazione.class, campi);
-
-        return prenotazioni;
+        return gestorePersistenza.cercaPerCampi(Prenotazione.class, campi);
     }
     public boolean annullaPrenotazione(long idPrenotazione){
         Prenotazione prenotazione = gestorePersistenza.trovaPerId(Prenotazione.class, (long) idPrenotazione);
-
         if(prenotazione == null) return false;
-
-        //dovremmo implementare anche lo stato annullata? in caso possiamo
-        //cambiare anche lo stato stesso con
-        //prenotazione.setStato(StatoPrenotazione.ANNULLATA);
-        boolean update = gestorePersistenza.elimina(Prenotazione.class, idPrenotazione);
-
-        return update;
-
+        return gestorePersistenza.elimina(Prenotazione.class, idPrenotazione);
     }
 }

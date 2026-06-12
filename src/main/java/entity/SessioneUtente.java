@@ -3,11 +3,9 @@ package entity;
 import dto.UtenteDTO;
 
 public class SessioneUtente {
-
     private static UtenteDTO utenteCorrente;
 
-    private SessioneUtente() {
-    }
+    private SessioneUtente() {}
 
     public static void impostaUtenteCorrente(UtenteDTO utente) {
         utenteCorrente = utente;

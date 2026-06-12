@@ -1,12 +1,13 @@
 package boundary;
 
+// *** NOTA: METTERE CONTROLLO INPUT DELL'UTENTE ***
+
 import controller.GestioneUtentiController;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class SchermataRegistrazione {
-
     private JPanel contentPane;
     private JTextField txtNome;
     private JTextField txtCognome;
@@ -131,6 +132,7 @@ public class SchermataRegistrazione {
         return contentPane;
     }
 
+    /* DA RIMUOVERE
     public static void main(String[] args) {
         JFrame frame = new JFrame("Registrazione");
         SchermataRegistrazione schermata = new SchermataRegistrazione();
@@ -140,5 +142,5 @@ public class SchermataRegistrazione {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-    }
+    }*/
 }

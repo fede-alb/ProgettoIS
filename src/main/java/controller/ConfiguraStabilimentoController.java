@@ -7,7 +7,6 @@ import entity.*;
 
 import java.util.*;
 
-//Prepara i dati che la boundary userà
 public class ConfiguraStabilimentoController {
 
     public static List<FilaDTO> visualizzaOmbrelloni(Date data) {
@@ -30,7 +29,6 @@ public class ConfiguraStabilimentoController {
         return risultatoDTO;
     }
 
-    //è un intermediario, chiama getIstanza di Stabilimento e restituisce il risultato
     public static boolean configuraStabilimento(int nPrimaFila,
                                          int nFilaIntermedia,
                                          int nUltimaFila,
@@ -53,7 +51,6 @@ public class ConfiguraStabilimentoController {
         return risultatoDTO;
     }
 
-    //Serve alla GUI
     public static boolean isStabilimentoGiaConfigurato() {
         return Stabilimento.getIstanza().isGiaConfigurato();
     }

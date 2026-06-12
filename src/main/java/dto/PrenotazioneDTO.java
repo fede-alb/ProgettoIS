@@ -1,8 +1,6 @@
 package dto;
 
-import entity.Fila;
-import entity.Ombrellone;
-
+import entity.Fila; // *** DEVE USARE DTO NON ENTITY ***
 
 import java.time.LocalDate;
 
@@ -17,7 +15,6 @@ public class PrenotazioneDTO {
     private final int costo;
     private final String stato;
 
-    //definisco il costruttore
     public PrenotazioneDTO(long idPrenotazione, LocalDate dataPrenotazione,String nomeCliente, String cognomeCliente,  Fila fila, int posto, String serviziAggiuntivi, int costo, String stato) {
         this.idPrenotazione = idPrenotazione;
         this.dataPrenotazione = dataPrenotazione;
@@ -30,7 +27,6 @@ public class PrenotazioneDTO {
         this.stato = stato;
     }
 
-    //definisco i metodi get
     public long getIdPrenotazione() {
         return idPrenotazione;
     }
@@ -50,5 +46,4 @@ public class PrenotazioneDTO {
     }
     public String getNomeCliente() { return nomeCliente; }
     public String getCognomeCliente() { return cognomeCliente; }
-
 }

@@ -15,7 +15,7 @@ public class Prenotazione {
     private int prezzo;
     private StatoPrenotazione stato;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "prenotazione_servizio",
             joinColumns = @JoinColumn(name = "idPrenotazione"),

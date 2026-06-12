@@ -42,10 +42,6 @@ public abstract class Utente {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public String getTelefono() {
         return telefono;
     }

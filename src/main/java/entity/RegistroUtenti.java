@@ -5,9 +5,6 @@ import database.GestorePersistenza;
 import java.util.List;
 import java.util.Map;
 
-// Verrà usata allo stesso modo di Stabilimento:
-// quest'ultima è usata per accedere al DB per prenotazioni, file/ombrelloni, servizi e tariffe
-// mentre registroUtenti accede e registra nuovi utenti nel DB
 public class RegistroUtenti {
     private static RegistroUtenti istanza;
     private final GestorePersistenza gestorePersistenza;
@@ -19,7 +16,6 @@ public class RegistroUtenti {
         return istanza;
     }
 
-    //Al primo avvio deve essere creato un gestore
     public boolean esisteAlmenoUnGestore() {
         List<Gestore> gestori = gestorePersistenza.cercaPerCampi(Gestore.class, Map.of());
         return gestori != null && !gestori.isEmpty();

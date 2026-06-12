@@ -4,7 +4,6 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
-import controller.GestionePrenotazioneController;
 import dto.PrenotazioneDTO;
 
 import javax.swing.*;
@@ -15,9 +14,6 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 
 public class AnnullamentoPopup {
-
-    private final GestionePrenotazioneController controller = new GestionePrenotazioneController();
-
     private JPanel annullamentoPanel;
     private JLabel messaggioConferma;
     private JPanel PannelloPulsanti;
@@ -62,7 +58,7 @@ public class AnnullamentoPopup {
                 }
                     else{
 
-                    boolean successo = controller.confermaAnnullamentoPrenotazione(prenotazioneSelezionata);
+                    boolean successo = GestionePrenotazioneController.confermaAnnullamentoPrenotazione(prenotazioneSelezionata);
                     JOptionPane.showMessageDialog(null, "Prenotazione annullata con successo.");
                     modelTabella.removeRow(indiceRiga);
 

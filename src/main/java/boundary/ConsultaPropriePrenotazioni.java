@@ -3,10 +3,7 @@ package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import controller.GestionePrenotazioneController;
-import dto.PrenotazioneDTO;
-import entity.Cliente;
-import entity.Ombrellone;
-import entity.Fila;
+import entity.Fila; // *** NON PUO' USARE ENTITY FILA
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +20,6 @@ public class ConsultaPropriePrenotazioni {
     private String stato;
 
     public ConsultaPropriePrenotazioni(long idCliente) {
-
         caricaPrenotazioniUtente(idCliente);
     }
 

@@ -1,14 +1,15 @@
 package boundary;
 
+// *** NOTA: METTERE CONTROLLO INPUT DELL'UTENTE ***
+
 import controller.GestioneUtentiController;
 import dto.UtenteDTO;
-import entity.SessioneUtente;
+import entity.SessioneUtente; // *** SISTEMARE: NON PUO' USARE ENTITY ***
 
 import javax.swing.*;
 import java.awt.*;
 
 public class SchermataAccesso {
-
     private JPanel contentPane;
     private JTextField txtEmail;
     private JPasswordField txtPassword;
@@ -90,7 +91,7 @@ public class SchermataAccesso {
             return;
         }
 
-        SessioneUtente.impostaUtenteCorrente(utente);
+        SessioneUtente.impostaUtenteCorrente(utente); // *** INTRODURRE CONTROLLER INTERMEDIARIO ***
 
         lblEsito.setText("Accesso effettuato con successo.");
         lblEsito.setForeground(new Color(0, 128, 0));
@@ -122,6 +123,7 @@ public class SchermataAccesso {
         return contentPane;
     }
 
+    /* DA RIMUOVERE
     public static void main(String[] args) {
         JFrame frame = new JFrame("Accesso");
         SchermataAccesso schermata = new SchermataAccesso();
@@ -131,5 +133,5 @@ public class SchermataAccesso {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-    }
+    }*/
 }
