@@ -2,10 +2,12 @@ package boundary;
 
 import controller.ConfiguraStabilimentoController;
 
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
 import dto.FilaDTO;
 import dto.OmbrelloneDTO;
+
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +24,7 @@ public class MappaOmbrelloniView {
     private JSpinner dataSpinner;
     private JButton btnConferma;
 
-    private boolean isPrenotazione;
+    private final boolean isPrenotazione;
 
     public MappaOmbrelloniView(boolean isPrenotazione) {
         this.isPrenotazione = isPrenotazione;
@@ -33,6 +35,20 @@ public class MappaOmbrelloniView {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
+        SpinnerDateModel dateModel = getSpinnerDateModel(cal);
+        dataSpinner.setModel(dateModel);
+        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dataSpinner, "dd/MM/yyyy");
+        dataSpinner.setEditor(dateEditor);
+        btnConferma.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stampaOmbrelloni();
+            }
+        });
+    }
+
+    @NotNull
+    private static SpinnerDateModel getSpinnerDateModel(Calendar cal) {
         Date oggi = cal.getTime();
 
         Calendar calFine = Calendar.getInstance();
@@ -44,16 +60,7 @@ public class MappaOmbrelloniView {
         calFine.set(Calendar.MILLISECOND, 999);
         Date fineSettembre = calFine.getTime();
 
-        SpinnerDateModel dateModel = new SpinnerDateModel(oggi, oggi, fineSettembre, Calendar.DAY_OF_MONTH);
-        dataSpinner.setModel(dateModel);
-        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dataSpinner, "dd/MM/yyyy");
-        dataSpinner.setEditor(dateEditor);
-        btnConferma.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                stampaOmbrelloni();
-            }
-        });
+        return new SpinnerDateModel(oggi, oggi, fineSettembre, Calendar.DAY_OF_MONTH);
     }
 
     public JFrame apriMappaOmbrelloniView() {

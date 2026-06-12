@@ -1,17 +1,13 @@
 package boundary;
 
+import dto.PrenotazioneDTO;
+
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.uiDesigner.core.Spacer;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import dto.PrenotazioneDTO;
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 
 public class DettaglioPrenotazioneView extends JFrame {
-
     private JPanel rootPanel;
     private JLabel lblCliente;
     private JLabel lblData;
@@ -21,10 +17,8 @@ public class DettaglioPrenotazioneView extends JFrame {
     private JLabel lblCosto;
 
     public DettaglioPrenotazioneView(PrenotazioneDTO p) {
-
         $$$setupUI$$$();
         setContentPane(rootPanel);
-
         lblCliente.setText(
                 p.getNomeCliente()
                         + " "
@@ -112,6 +106,4 @@ public class DettaglioPrenotazioneView extends JFrame {
     public JComponent $$$getRootComponent$$$() {
         return rootPanel;
     }
-
-
 }

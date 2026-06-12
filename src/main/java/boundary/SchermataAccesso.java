@@ -4,7 +4,7 @@ package boundary;
 
 import controller.GestioneUtentiController;
 import dto.UtenteDTO;
-import entity.SessioneUtente; // *** SISTEMARE: NON PUO' USARE ENTITY ***
+import dto.SessioneUtente;
 
 import javax.swing.*;
 import java.awt.*;
@@ -91,7 +91,7 @@ public class SchermataAccesso {
             return;
         }
 
-        SessioneUtente.impostaUtenteCorrente(utente); // *** INTRODURRE CONTROLLER INTERMEDIARIO ***
+        SessioneUtente.impostaUtenteCorrente(utente);
 
         lblEsito.setText("Accesso effettuato con successo.");
         lblEsito.setForeground(new Color(0, 128, 0));
@@ -123,7 +123,7 @@ public class SchermataAccesso {
         return contentPane;
     }
 
-    /* DA RIMUOVERE
+    // Inizio dell'applicazione
     public static void main(String[] args) {
         JFrame frame = new JFrame("Accesso");
         SchermataAccesso schermata = new SchermataAccesso();
@@ -133,5 +133,5 @@ public class SchermataAccesso {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-    }*/
+    }
 }

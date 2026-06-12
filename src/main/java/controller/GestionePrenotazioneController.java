@@ -1,13 +1,14 @@
 package controller;
 
+import dto.FilaDTO;
 import entity.*;
 import dto.UtenteDTO;
 import dto.PrenotazioneDTO;
+import dto.SessioneUtente;
 
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -22,12 +23,8 @@ public class GestionePrenotazioneController {
         return 0;
     }
 
-    public static List<Prenotazione> consultaElencoPrenotazioni() {
-        return Stabilimento.getIstanza().ottieniPrenotazioni();
-    }
-
     public static List<PrenotazioneDTO> consultaElencoPrenotazioniDTO() {
-        List<Prenotazione> prenotazioni = consultaElencoPrenotazioni();
+        List<Prenotazione> prenotazioni = Stabilimento.getIstanza().ottieniPrenotazioni();
 
         return prenotazioni.stream()
                 .map(GestionePrenotazioneController::convertiInDTO)
@@ -35,20 +32,11 @@ public class GestionePrenotazioneController {
     }
 
     public static List<PrenotazioneDTO> consultaPrenotazioniPerDataDTO(LocalDate giorno) {
-        List<Prenotazione> prenotazioni = consultaPrenotazioniPerData(giorno);
+        List<Prenotazione> prenotazioni = Stabilimento.getIstanza().ottieniPrenotazioniPerData(giorno);
 
         return prenotazioni.stream()
                 .map(GestionePrenotazioneController::convertiInDTO)
                 .toList();
-    }
-
-    public static Prenotazione consultaPrenotazione(Long idPrenotazione) {
-        return Stabilimento.getIstanza().ottieniPrenotazione(idPrenotazione);
-    }
-
-
-    public static List<Prenotazione> consultaPrenotazioniPerData(LocalDate giorno) {
-        return Stabilimento.getIstanza().ottieniPrenotazioniPerData(giorno);
     }
 
     public static int effettuaPrenotazione(Date data, int idOmbrellone, List<Integer> idServizi, long idCliente) {
@@ -63,43 +51,46 @@ public class GestionePrenotazioneController {
 
 
     public static PrenotazioneDTO consultaPrenotazioneDTO(Long idPrenotazione) {
-        Prenotazione e = consultaPrenotazione(idPrenotazione);
+        Prenotazione e = Stabilimento.getIstanza().ottieniPrenotazione(idPrenotazione);
         String serviziString = convertiServiziInStringa(e.getServizi());
+        FilaDTO filaDTO = new FilaDTO(e.getOmbrellone().getFila().getPosizione());
 
         return new PrenotazioneDTO(
                 e.getIdPrenotazione(),
                 e.getData(),
                 e.getCliente().getNome(),
                 e.getCliente().getCognome(),
-                e.getOmbrellone().getFila(),
+                filaDTO,
                 e.getOmbrellone().getNumero(),
                 serviziString,
                 e.getPrezzo(),
                 e.getStato().toString()
         );
     }
-        public static List<PrenotazioneDTO> ottieniPrenotazioniUtente(long idCliente){
-            List<PrenotazioneDTO> listaDTO = new ArrayList<>();
-            List<Prenotazione> entities = Stabilimento.getIstanza().ottieniPrenotazioniDiCliente(idCliente);
 
-            for(Prenotazione e : entities) {
-                String serviziString = convertiServiziInStringa(e.getServizi());
+    public static List<PrenotazioneDTO> ottieniPrenotazioniUtente(long idCliente){
+        List<PrenotazioneDTO> listaDTO = new ArrayList<>();
+        List<Prenotazione> prenotazioni = Stabilimento.getIstanza().ottieniPrenotazioniDiCliente(idCliente);
 
-                PrenotazioneDTO dto = new PrenotazioneDTO(
-                        e.getIdPrenotazione(),
-                        e.getData(),
-                        e.getCliente().getNome(),
-                        e.getCliente().getCognome(),
-                        e.getOmbrellone().getFila(),
-                        e.getOmbrellone().getNumero(),
-                        serviziString,
-                        e.getPrezzo(),
-                        e.getStato().toString()
-                );
-                listaDTO.add(dto);
-            }
-            return listaDTO;
+        for(Prenotazione e : prenotazioni) {
+            String serviziString = convertiServiziInStringa(e.getServizi());
+            FilaDTO filaDTO = new FilaDTO(e.getOmbrellone().getFila().getPosizione());
+
+            PrenotazioneDTO dto = new PrenotazioneDTO(
+                    e.getIdPrenotazione(),
+                    e.getData(),
+                    e.getCliente().getNome(),
+                    e.getCliente().getCognome(),
+                    filaDTO,
+                    e.getOmbrellone().getNumero(),
+                    serviziString,
+                    e.getPrezzo(),
+                    e.getStato().toString()
+            );
+            listaDTO.add(dto);
         }
+        return listaDTO;
+    }
 
         private static String convertiServiziInStringa(Set<ServizioAggiuntivo> servizi) {  //da capire come risolvere il problema query lazy
             /*
@@ -121,13 +112,14 @@ public class GestionePrenotazioneController {
 
     private static PrenotazioneDTO convertiInDTO(Prenotazione e) {
         String serviziString = convertiServiziInStringa(e.getServizi());
+        FilaDTO filaDTO = new FilaDTO(e.getOmbrellone().getFila().getPosizione());
 
         return new PrenotazioneDTO(
                 e.getIdPrenotazione(),
                 e.getData(),
                 e.getCliente().getNome(),
                 e.getCliente().getCognome(),
-                e.getOmbrellone().getFila(),
+                filaDTO,
                 e.getOmbrellone().getNumero(),
                 serviziString,
                 e.getPrezzo(),

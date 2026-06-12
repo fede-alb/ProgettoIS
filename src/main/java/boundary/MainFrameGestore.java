@@ -64,7 +64,7 @@ public class MainFrameGestore {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null,
-                        "Schermata elenco prenotazioni da collegare.");
+                        "DA COLLEGARE!");
             }
         });
 
@@ -72,7 +72,7 @@ public class MainFrameGestore {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null,
-                        "Schermata monitoraggio da collegare.");
+                        "Attualmente non disponibile.");
             }
         });
     }

@@ -53,25 +53,11 @@ public class MainFrameCliente {
         });
     }
 
-    //Il metodo che useremo
     public static void apriHomepage() {
         JFrame frame = new JFrame("Homepage Cliente");
         MainFrameCliente mainFrame = new MainFrameCliente();
         frame.setContentPane(mainFrame.mainPanel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //Variazione
-        frame.setResizable(true);
-        frame.pack();
-        frame.setSize(700, 200);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
-
-    //Per test
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Homepage Cliente");
-        MainFrameCliente mainFrame = new MainFrameCliente();
-        frame.setContentPane(mainFrame.mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);
         frame.pack();
         frame.setSize(700, 200);

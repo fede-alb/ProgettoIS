@@ -1,12 +1,13 @@
 package boundary;
 
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.uiDesigner.core.Spacer;
 import controller.ConfiguraStabilimentoController;
 import controller.GestionePrenotazioneController;
 import dto.OmbrelloneDTO;
 import dto.ServizioAggiuntivoDTO;
+
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,7 +28,7 @@ public class EffettuaPrenotazioneForm {
     private JButton confermaButton;
     private JPanel panelServizi;
 
-    private List<JCheckBox> listaCheckboxServizi = new ArrayList<>();
+    private final List<JCheckBox> listaCheckboxServizi = new ArrayList<>();
 
     public EffettuaPrenotazioneForm(Date dataSeleziona, OmbrelloneDTO ombrelloneScelto) {
         $$$setupUI$$$();

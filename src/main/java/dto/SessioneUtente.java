@@ -1,6 +1,4 @@
-package entity;
-
-import dto.UtenteDTO;
+package dto;
 
 public class SessioneUtente {
     private static UtenteDTO utenteCorrente;
