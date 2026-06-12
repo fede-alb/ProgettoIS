@@ -4,6 +4,7 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
+import controller.GestionePrenotazioneController;
 import dto.PrenotazioneDTO;
 
 import javax.swing.*;

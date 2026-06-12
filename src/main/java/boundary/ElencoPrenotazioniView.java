@@ -56,9 +56,6 @@ public class ElencoPrenotazioniView extends JFrame {
         model = new DefaultTableModel(colonne, 0);
         tabPrenotazioni.setModel(model);
 
-        GestionePrenotazioneController controller =
-                new GestionePrenotazioneController();
-
 
         dateChooser.setDateFormatString("dd/MM/yyyy");
         dateChooser.setPreferredSize(new Dimension(120, 30));
@@ -78,7 +75,7 @@ public class ElencoPrenotazioniView extends JFrame {
             if (data != null) {
 
                 aggiornaTabella(
-                        controller.consultaPrenotazioniPerDataDTO(dataLocale)
+                        GestionePrenotazioneController.consultaPrenotazioniPerDataDTO(dataLocale)
                 );
             }
         });
@@ -87,7 +84,7 @@ public class ElencoPrenotazioniView extends JFrame {
         btnMostraTutte.addActionListener(e -> {
 
             aggiornaTabella(
-                    controller.consultaElencoPrenotazioniDTO()
+                    GestionePrenotazioneController.consultaElencoPrenotazioniDTO()
             );
         });
 
@@ -95,12 +92,12 @@ public class ElencoPrenotazioniView extends JFrame {
         btnMostraTutte.addActionListener(e ->
 
                 aggiornaTabella(
-                        controller.consultaElencoPrenotazioniDTO()
+                        GestionePrenotazioneController.consultaElencoPrenotazioniDTO()
                 )
         );
 
         aggiornaTabella(
-                controller.consultaElencoPrenotazioniDTO()
+                GestionePrenotazioneController.consultaElencoPrenotazioniDTO()
         );
 
 
@@ -118,7 +115,7 @@ public class ElencoPrenotazioniView extends JFrame {
 
 
                     PrenotazioneDTO p =
-                            controller.consultaPrenotazioneDTO(idPrenotazione);
+                            GestionePrenotazioneController.consultaPrenotazioneDTO(idPrenotazione);
 
                     new DettaglioPrenotazioneView(p);
                 }

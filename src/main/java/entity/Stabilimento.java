@@ -191,4 +191,31 @@ public class Stabilimento {
         if(prenotazione == null) return false;
         return gestorePersistenza.elimina(Prenotazione.class, idPrenotazione);
     }
+
+    public List<Prenotazione> ottieniPrenotazioni() {
+
+        return gestorePersistenza.cercaPerCampi(
+                Prenotazione.class,
+                Map.of()
+        );
+    }
+
+    public Prenotazione ottieniPrenotazione(long idPrenotazione) {
+
+        return gestorePersistenza.trovaPerId(
+                Prenotazione.class,
+                idPrenotazione
+        );
+    }
+
+
+    public List<Prenotazione> ottieniPrenotazioniPerData(
+            LocalDate giorno) {
+
+        return gestorePersistenza.cercaPerCampi(
+                Prenotazione.class,
+                Map.of("data", giorno)
+        );
+    }
+
 }

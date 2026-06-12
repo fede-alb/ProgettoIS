@@ -23,14 +23,14 @@ public class GestionePrenotazioneController {
     }
 
     public static List<Prenotazione> consultaElencoPrenotazioni() {
-        return gp.cercaPerCampi(Prenotazione.class, Map.of());
+        return Stabilimento.getIstanza().ottieniPrenotazioni();
     }
 
     public static List<PrenotazioneDTO> consultaElencoPrenotazioniDTO() {
         List<Prenotazione> prenotazioni = consultaElencoPrenotazioni();
 
         return prenotazioni.stream()
-                .map(this::convertiInDTO)
+                .map(GestionePrenotazioneController::convertiInDTO)
                 .toList();
     }
 
@@ -38,23 +38,17 @@ public class GestionePrenotazioneController {
         List<Prenotazione> prenotazioni = consultaPrenotazioniPerData(giorno);
 
         return prenotazioni.stream()
-                .map(this::convertiInDTO)
+                .map(GestionePrenotazioneController::convertiInDTO)
                 .toList();
     }
 
     public static Prenotazione consultaPrenotazione(Long idPrenotazione) {
-        return gp.trovaPerId(
-                Prenotazione.class,
-                idPrenotazione
-        );
+        return Stabilimento.getIstanza().ottieniPrenotazione(idPrenotazione);
     }
 
 
     public static List<Prenotazione> consultaPrenotazioniPerData(LocalDate giorno) {
-        return gp.cercaPerCampi(
-                Prenotazione.class,
-                Map.of("data", giorno)
-        );
+        return Stabilimento.getIstanza().ottieniPrenotazioniPerData(giorno);
     }
 
     public static int effettuaPrenotazione(Date data, int idOmbrellone, List<Integer> idServizi, long idCliente) {
