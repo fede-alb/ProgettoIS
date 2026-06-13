@@ -26,7 +26,7 @@ public class ConsultaPropriePrenotazioni {
     public void caricaPrenotazioniUtente(long idCliente) {
         List<dto.PrenotazioneDTO> lista = GestionePrenotazioneController.ottieniPrenotazioniUtente(idCliente);
 
-        if (lista == null || lista.isEmpty()) {
+        if (lista.isEmpty()) {
             // Svuota la tabella (se c'era qualcosa da sessioni precedenti)
             if (table1 != null) {
                 ((DefaultTableModel) table1.getModel()).setRowCount(0);
@@ -39,25 +39,23 @@ public class ConsultaPropriePrenotazioni {
                     "Nessuna Prenotazione",
                     JOptionPane.INFORMATION_MESSAGE
             );
+        } else {
+            assert table1 != null;
+            DefaultTableModel model = (DefaultTableModel) table1.getModel();
+            model.setRowCount(0);
 
-            return;
-        }
-
-        assert table1 != null;
-        DefaultTableModel model = (DefaultTableModel) table1.getModel();
-        model.setRowCount(0);
-
-        for (dto.PrenotazioneDTO p : lista) {
-            model.addRow(new Object[]{
-                    p.getIdPrenotazione(),
-                    p.getDataPrenotazione(),
-                    p.getFila().getPosizione(),
-                    p.getPosto(),
-                    p.getServiziAggiuntivi(),
-                    p.getCosto(),
-                    p.getStato(),
-                    "Annulla"
-            });
+            for (dto.PrenotazioneDTO p : lista) {
+                model.addRow(new Object[]{
+                        p.getIdPrenotazione(),
+                        p.getDataPrenotazione(),
+                        p.getFila().getPosizione(),
+                        p.getPosto(),
+                        p.getServiziAggiuntivi(),
+                        p.getCosto(),
+                        p.getStato(),
+                        "Annulla"
+                });
+            }
         }
     }
 
@@ -209,7 +207,6 @@ public class ConsultaPropriePrenotazioni {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        frame.setResizable(false);
         return frame;
     }
 }

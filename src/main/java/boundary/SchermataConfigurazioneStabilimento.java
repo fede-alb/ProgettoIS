@@ -71,7 +71,7 @@ public class SchermataConfigurazioneStabilimento {
             return;
         }
 
-        if (descrizione.matches("^[a-zA-Z0-9 ]+$")) {
+        if (!descrizione.matches("^[a-zA-Z0-9 ]+$")) {
             mostraErrore("Descrizione contiene caratteri non validi.");
             return;
         }

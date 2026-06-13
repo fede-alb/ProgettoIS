@@ -45,6 +45,7 @@ public class Stabilimento {
                 filaCorrente.aggiungiOmbrellone(ombrellone);
                 if(!gestorePersistenza.salva(ombrellone)) return false;
             }
+            configuraTariffaFila(filaCorrente, f);
         }
 
         for (Map.Entry<String, Integer> entry : servizi.entrySet()) {
@@ -54,9 +55,32 @@ public class Stabilimento {
                     new ArrayList<>()
             );
             if(!gestorePersistenza.salva(servizio)) return false;
+            configuraTariffaServizio(servizio);
         }
 
         return true;
+    }
+
+    // *** FUNZIONE HELPER: NESSUNO HA IMPLEMENTATO "ConfiguraTariffe"
+    private void configuraTariffaFila(Fila filaCorrente, int n) {
+        PeriodoTariffa alta = PeriodoTariffa.ALTA_STAGIONE;
+        PeriodoTariffa bassa = PeriodoTariffa.BASSA_STAGIONE;
+        TariffaFila tariffaAlta = new TariffaFila(50 - (n * 10), alta);
+        TariffaFila tariffaBassa = new TariffaFila(30 - (n * 5), bassa);
+        filaCorrente.aggiungiTariffa(tariffaAlta);
+        filaCorrente.aggiungiTariffa(tariffaBassa);
+        gestorePersistenza.aggiorna(filaCorrente);
+    }
+
+    // *** FUNZIONE HELPER: NESSUNO HA IMPLEMENTATO "ConfiguraTariffe"
+    private void configuraTariffaServizio(ServizioAggiuntivo servizioCorrente) {
+        PeriodoTariffa alta = PeriodoTariffa.ALTA_STAGIONE;
+        PeriodoTariffa bassa = PeriodoTariffa.BASSA_STAGIONE;
+        TariffaServizio tariffaAlta = new TariffaServizio(50, alta);
+        TariffaServizio tariffaBassa = new TariffaServizio(25, bassa);
+        servizioCorrente.aggiungiTariffa(tariffaAlta);
+        servizioCorrente.aggiungiTariffa(tariffaBassa);
+        gestorePersistenza.aggiorna(servizioCorrente);
     }
 
     public Map<Fila, Map<Ombrellone, Boolean>> visualizzaOmbrelloni(Date data) {
@@ -162,9 +186,9 @@ public class Stabilimento {
                     tariffaServizio = t;
                 }
             }
+            assert tariffaServizio != null;
+            prezzo += tariffaServizio.getImporto();
         }
-        assert tariffaServizio != null;
-        prezzo += tariffaServizio.getImporto();
 
         return prezzo;
     }

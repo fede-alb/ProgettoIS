@@ -143,7 +143,7 @@ public class SchermataRegistrazione {
             return;
         }
 
-        if (telefono.length() == 10) {
+        if (telefono.length() != 10) {
             lblEsito.setText("Il telefono deve avere esattamente 10 numeri.");
             lblEsito.setForeground(Color.RED);
             return;
