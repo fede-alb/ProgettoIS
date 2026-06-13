@@ -27,6 +27,24 @@ public class ConsultaPropriePrenotazioni {
 
     public void caricaPrenotazioniUtente(long idCliente) {
         List<dto.PrenotazioneDTO> lista = GestionePrenotazioneController.ottieniPrenotazioniUtente(idCliente);
+
+        if (lista == null || lista.isEmpty()) {
+            // Svuota la tabella (se c'era qualcosa da sessioni precedenti)
+            if (table1 != null) {
+                ((DefaultTableModel) table1.getModel()).setRowCount(0);
+            }
+
+            // Mostra il popup di avviso a schermo
+            JOptionPane.showMessageDialog(
+                    panel,
+                    "Non hai effettuato nessuna prenotazione.",
+                    "Nessuna Prenotazione",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+            return;
+        }
+
         assert table1 != null;
         DefaultTableModel model = (DefaultTableModel) table1.getModel();
         model.setRowCount(0);
