@@ -41,7 +41,7 @@ public class JpaUtil {
          *
          * <persistence-unit name="boatyardPU">
          */
-        emf = Persistence.createEntityManagerFactory("stabilimento_balneare");
+        emf = Persistence.createEntityManagerFactory("stabilimento");
     }
 
     /*

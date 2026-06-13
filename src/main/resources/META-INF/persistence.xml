@@ -5,7 +5,7 @@
                                  https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
              version="3.1">
 
-    <persistence-unit name="stabilimento_balneare">
+    <persistence-unit name="stabilimento">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>entity.Ombrellone</class>
         <class>entity.Fila</class>
@@ -13,7 +13,7 @@
             <property name="jakarta.persistence.jdbc.driver"
                       value="com.mysql.cj.jdbc.Driver"/>
             <property name="jakarta.persistence.jdbc.url"
-                      value="jdbc:mysql://127.0.0.1:3306/stabilimento_balneare"/>
+                      value="jdbc:mysql://127.0.0.1:3306/stabilimento"/>
             <property name="jakarta.persistence.jdbc.user"
                       value="root"/>
             <property name="jakarta.persistence.jdbc.password"
