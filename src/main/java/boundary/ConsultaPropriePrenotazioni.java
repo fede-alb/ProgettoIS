@@ -5,7 +5,6 @@ import dto.FilaDTO;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -186,7 +185,6 @@ public class ConsultaPropriePrenotazioni {
         dialog.setVisible(true);
     }
 
-    @NotNull
     private AnnullamentoPopup getAnnullamentoPopup(int rigaSelezionata) {
         DefaultTableModel model = (DefaultTableModel) table1.getModel();
 
