@@ -16,11 +16,11 @@ public class MainFrameGestore {
     private JButton visualizzaOmbrelloniButton;
     private JButton elencoPrenotazioniButton;
     private JButton monitoraggioButton;
+    private JButton configuraTariffeButton;
 
     private JFrame frameConfiguraStabilimento;
     private JFrame frameVisualizzaOmbrelloni;
     private JFrame frameElencoPrenotazioni;
-    private JFrame frameMonitoraggio;
 
     public MainFrameGestore() {
         homepageLabel.setText("Homepage Gestore");
@@ -63,12 +63,27 @@ public class MainFrameGestore {
         elencoPrenotazioniButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,
-                        "DA COLLEGARE!");
+                if (frameElencoPrenotazioni == null || !frameElencoPrenotazioni.isVisible()) {
+                    ElencoPrenotazioniView elencoPrenotazioni = new ElencoPrenotazioniView();
+                    frameElencoPrenotazioni = elencoPrenotazioni.apriElencoPrenotazioniView();
+                    frameElencoPrenotazioni.setTitle("Elenco Prenotazioni");
+                    frameElencoPrenotazioni.setLocationRelativeTo(null);
+                    frameElencoPrenotazioni.setVisible(true);
+                } else {
+                    frameElencoPrenotazioni.toFront();
+                    frameElencoPrenotazioni.requestFocus();
+                }
             }
         });
 
         monitoraggioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null,
+                        "Attualmente non disponibile.");
+            }
+        });
+        configuraTariffeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null,
@@ -109,9 +124,9 @@ public class MainFrameGestore {
      */
     private void $$$setupUI$$$() {
         mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayoutManager(5, 2, new Insets(0, 0, 0, 0), -1, -1));
+        mainPanel.setLayout(new GridLayoutManager(6, 2, new Insets(0, 0, 0, 0), -1, -1));
         final Spacer spacer1 = new Spacer();
-        mainPanel.add(spacer1, new GridConstraints(1, 1, 4, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        mainPanel.add(spacer1, new GridConstraints(1, 1, 5, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         homepageLabel = new JLabel();
         homepageLabel.setText("Homepage Gestore");
         mainPanel.add(homepageLabel, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -120,13 +135,16 @@ public class MainFrameGestore {
         mainPanel.add(configuraStabilimentoButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         visualizzaOmbrelloniButton = new JButton();
         visualizzaOmbrelloniButton.setText("Visualizza Ombrelloni");
-        mainPanel.add(visualizzaOmbrelloniButton, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        mainPanel.add(visualizzaOmbrelloniButton, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         elencoPrenotazioniButton = new JButton();
         elencoPrenotazioniButton.setText("Elenco Prenotazioni");
-        mainPanel.add(elencoPrenotazioniButton, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        mainPanel.add(elencoPrenotazioniButton, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         monitoraggioButton = new JButton();
         monitoraggioButton.setText("Monitoraggio");
-        mainPanel.add(monitoraggioButton, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        mainPanel.add(monitoraggioButton, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        configuraTariffeButton = new JButton();
+        configuraTariffeButton.setText("Configura Tariffe");
+        mainPanel.add(configuraTariffeButton, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

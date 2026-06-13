@@ -19,7 +19,6 @@ public class ConsultaPropriePrenotazioni {
     private JPanel panel;
     private JTable table1;
     private JScrollPane ScrollPane1;
-    private String stato;
 
     public ConsultaPropriePrenotazioni(long idCliente) {
         caricaPrenotazioniUtente(idCliente);
@@ -176,7 +175,7 @@ public class ConsultaPropriePrenotazioni {
         //passaggio dei dati e formatting della tabella
         long idPrenotazione = (long) model.getValueAt(rigaSelezionata, 0);
         LocalDate data = (LocalDate) model.getValueAt(rigaSelezionata, 1);
-        FilaDTO filaDTO =  (FilaDTO) model.getValueAt(rigaSelezionata, 2);
+        FilaDTO filaDTO = new FilaDTO((int) model.getValueAt(rigaSelezionata, 2));
         int posto = (Integer)  model.getValueAt(rigaSelezionata, 3);
         String servizi = (String) model.getValueAt(rigaSelezionata, 4);
         int costo =  (Integer) model.getValueAt(rigaSelezionata, 5);
@@ -185,6 +184,17 @@ public class ConsultaPropriePrenotazioni {
         dto.PrenotazioneDTO dtoSelezionato = new dto.PrenotazioneDTO(idPrenotazione, data, "", "", filaDTO, posto, servizi, costo, stato);
 
         return new AnnullamentoPopup(dtoSelezionato, model, rigaSelezionata);
+    }
+
+    public JFrame apriConsultaPropriePrenotazioni() {
+        JFrame frame = new JFrame("Mie prenotazioni");
+        frame.setContentPane(panel);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        frame.setResizable(false);
+        return frame;
     }
 }
 

@@ -189,6 +189,8 @@ public class Stabilimento {
     public boolean annullaPrenotazione(long idPrenotazione){
         Prenotazione prenotazione = gestorePersistenza.trovaPerId(Prenotazione.class, (long) idPrenotazione);
         if(prenotazione == null) return false;
+        ServizioMessaggistica sms = new SMSAdapter();
+        sms.inviaMessaggio("Prenotazione annullata [ID: " + idPrenotazione + "].");
         return gestorePersistenza.elimina(Prenotazione.class, idPrenotazione);
     }
 

@@ -27,93 +27,10 @@ public class SchermataConfigurazioneStabilimento {
     private DefaultTableModel modelRiepilogo;
 
     public SchermataConfigurazioneStabilimento() {
-        //costruisciUI();
         inizializzaTabellaServizi();
         registraEventi();
         verificaStabilimentoEsistente();
     }
-
-    /* SI PUO' ELIMINARE?
-    private void costruisciUI() {
-        contentPane = new JPanel(new BorderLayout(10, 10));
-        contentPane.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-
-        //Sezione ombrelloni
-        JPanel panelOmbrelloni = new JPanel(new GridLayout(3, 2, 8, 8));
-        panelOmbrelloni.setBorder(BorderFactory.createTitledBorder("Numero ombrelloni per fila"));
-
-        panelOmbrelloni.add(new JLabel("Prima fila"));
-        txtPrimaFila = new JTextField();
-        panelOmbrelloni.add(txtPrimaFila);
-
-        panelOmbrelloni.add(new JLabel("Fila intermedia"));
-        txtFilaIntermedia = new JTextField();
-        panelOmbrelloni.add(txtFilaIntermedia);
-
-        panelOmbrelloni.add(new JLabel("Ultima fila"));
-        txtUltimaFila = new JTextField();
-        panelOmbrelloni.add(txtUltimaFila);
-
-        //Sezione inserimento servizio
-        JPanel panelInserimento = new JPanel(new GridLayout(2, 2, 8, 8));
-        panelInserimento.setBorder(BorderFactory.createTitledBorder("Aggiungi servizio aggiuntivo"));
-
-        panelInserimento.add(new JLabel("Descrizione"));
-        txtDescrizioneServizio = new JTextField();
-        panelInserimento.add(txtDescrizioneServizio);
-
-        panelInserimento.add(new JLabel("Disponibilita"));
-        txtDisponibilitaServizio = new JTextField();
-        panelInserimento.add(txtDisponibilitaServizio);
-
-        btnAggiungiServizio = new JButton("Aggiungi servizio");
-
-        JPanel panelInserimentoWrapper = new JPanel(new BorderLayout(8, 8));
-        panelInserimentoWrapper.add(panelInserimento, BorderLayout.CENTER);
-        panelInserimentoWrapper.add(btnAggiungiServizio, BorderLayout.SOUTH);
-
-        //Tabella riepilogo servizi
-        modelRiepilogo = new DefaultTableModel(new String[]{"Descrizione", "Disponibilita"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        tblRiepilogoServizi = new JTable(modelRiepilogo);
-        tblRiepilogoServizi.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane scrollRiepilogo = new JScrollPane(tblRiepilogoServizi);
-        scrollRiepilogo.setPreferredSize(new Dimension(350, 130));
-
-        btnEliminaServizio = new JButton("Elimina servizio selezionato");
-
-        JPanel panelRiepilogo = new JPanel(new BorderLayout(8, 8));
-        panelRiepilogo.setBorder(BorderFactory.createTitledBorder("Servizi aggiunti"));
-        panelRiepilogo.add(scrollRiepilogo, BorderLayout.CENTER);
-        panelRiepilogo.add(btnEliminaServizio, BorderLayout.SOUTH);
-
-        //Sezione servizi (inserimento + riepilogo)
-        JPanel panelServizi = new JPanel(new BorderLayout(10, 10));
-        panelServizi.add(panelInserimentoWrapper, BorderLayout.NORTH);
-        panelServizi.add(panelRiepilogo, BorderLayout.CENTER);
-
-        //Bottone conferma + etichetta esito
-        btnConferma = new JButton("Conferma configurazione");
-        lblEsito = new JLabel(" ");
-
-        JPanel panelSud = new JPanel(new BorderLayout(8, 8));
-        panelSud.add(btnConferma, BorderLayout.NORTH);
-        panelSud.add(lblEsito, BorderLayout.SOUTH);
-
-        //Assemblaggio
-        JPanel panelCentro = new JPanel(new BorderLayout(10, 10));
-        panelCentro.add(panelOmbrelloni, BorderLayout.NORTH);
-        panelCentro.add(panelServizi, BorderLayout.CENTER);
-
-        contentPane.add(panelCentro, BorderLayout.CENTER);
-        contentPane.add(panelSud, BorderLayout.SOUTH);
-    }
-    */
 
     private void registraEventi() {
         btnAggiungiServizio.addActionListener(e -> aggiungiServizio());
@@ -149,6 +66,16 @@ public class SchermataConfigurazioneStabilimento {
             return;
         }
 
+        if (descrizione.length() > 50) {
+            mostraErrore("Descrizione troppo lunga.");
+            return;
+        }
+
+        if (descrizione.matches("^[a-zA-Z0-9 ]+$")) {
+            mostraErrore("Descrizione contiene caratteri non validi.");
+            return;
+        }
+
         if (disponibilitaText.isEmpty()) {
             mostraErrore("Inserisci la disponibilità del servizio.");
             return;
@@ -164,6 +91,11 @@ public class SchermataConfigurazioneStabilimento {
 
         if (disponibilita <= 0) {
             mostraErrore("La disponibilità deve essere maggiore di 0.");
+            return;
+        }
+
+        if (disponibilita > 150) {
+            mostraErrore("La disponibilità deve essere minore di 151.");
             return;
         }
 
@@ -221,6 +153,11 @@ public class SchermataConfigurazioneStabilimento {
             return;
         }
 
+        if (nPrima > 20 || nIntermedia > 20 || nUltima > 20) {
+            mostraErrore("Il numero di ombrelloni deve essere minore di 20.");
+            return;
+        }
+
         Map<String, Integer> servizi = new LinkedHashMap<>();
 
         for (int i = 0; i < modelRiepilogo.getRowCount(); i++) {
@@ -260,18 +197,6 @@ public class SchermataConfigurazioneStabilimento {
         tblRiepilogoServizi.setModel(modelRiepilogo);
         tblRiepilogoServizi.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
-
-    /* DA RIMUOVERE
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Configura Stabilimento");
-        SchermataConfigurazioneStabilimento schermata = new SchermataConfigurazioneStabilimento();
-        frame.setContentPane(schermata.getContentPane());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }*/
 
     {
 // GUI initializer generated by IntelliJ IDEA GUI Designer

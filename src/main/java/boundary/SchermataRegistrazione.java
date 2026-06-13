@@ -1,7 +1,5 @@
 package boundary;
 
-// *** NOTA: METTERE CONTROLLO INPUT DELL'UTENTE ***
-
 import controller.GestioneUtentiController;
 
 import javax.swing.*;
@@ -103,14 +101,86 @@ public class SchermataRegistrazione {
             return;
         }
 
-        if (!email.contains("@") || !email.contains(".")) {
-            lblEsito.setText("Email non valida.");
+        if (!nome.matches("^[a-zA-Z ]+$")) {
+            lblEsito.setText("Nome: caratteri non validi.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (!cognome.matches("^[a-zA-Z ]+$")) {
+            lblEsito.setText("Cognome: caratteri non validi.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+            lblEsito.setText("Email: caratteri non validi.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (!password.matches("^[a-zA-Z0-9]+$")) {
+            lblEsito.setText("Password: caratteri non validi.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (!telefono.matches("^[0-9]+$")) {
+            lblEsito.setText("Telefono: caratteri non validi.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (nome.length() > 40) {
+            lblEsito.setText("Nome troppo lungo.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (cognome.length() > 40) {
+            lblEsito.setText("Cognome troppo lungo.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (telefono.length() == 10) {
+            lblEsito.setText("Il telefono deve avere esattamente 10 numeri.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (email.length() < 15) {
+            lblEsito.setText("Email troppo corta.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (email.length() > 40) {
+            lblEsito.setText("Email troppo lunga.");
             lblEsito.setForeground(Color.RED);
             return;
         }
 
         if (GestioneUtentiController.emailGiaRegistrata(email)) {
             lblEsito.setText("Email già registrata.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (password.length() < 8) {
+            lblEsito.setText("Password troppo corta.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (password.length() > 20) {
+            lblEsito.setText("Password troppo lunga.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (password.equals("password")) {
+            lblEsito.setText("Davvero questa password?");
             lblEsito.setForeground(Color.RED);
             return;
         }

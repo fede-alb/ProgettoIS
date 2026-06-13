@@ -92,17 +92,13 @@ public class GestionePrenotazioneController {
         return listaDTO;
     }
 
-        private static String convertiServiziInStringa(Set<ServizioAggiuntivo> servizi) {  //da capire come risolvere il problema query lazy
-            /*
+        private static String convertiServiziInStringa(Set<ServizioAggiuntivo> servizi) {
             if (servizi == null || servizi.isEmpty()) return "Nessuno";
             List<String> nomi = new ArrayList<>();
             for (ServizioAggiuntivo s : servizi) {
                 nomi.add(s.getDescrizione());
             }
             return String.join(", ", nomi);
-
-             */
-            return "nessuno";
         }
 
     public static boolean confermaAnnullamentoPrenotazione(PrenotazioneDTO dto) {
