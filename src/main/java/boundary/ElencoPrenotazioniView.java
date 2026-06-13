@@ -90,6 +90,16 @@ public class ElencoPrenotazioniView extends JFrame {
         });
     }
 
+    public JFrame apriElencoPrenotazioniView() {
+        JFrame frame = new JFrame("Elenco Prenotazioni");
+        frame.setContentPane(rootPanel);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        frame.setResizable(false);
+        return frame;
+    }
 
     private void aggiornaTabella(List<PrenotazioneDTO> prenotazioni) {
         model.setRowCount(0);

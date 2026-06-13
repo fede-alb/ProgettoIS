@@ -3,7 +3,8 @@ package eseguibile;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-public class MainCreaTabelle {
+// *** HELPER PER CREARE LE TABELLE IN MYSQL ***
+public class HelperCreaTabelle {
     static void main() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("stabilimento");
         emf.close();

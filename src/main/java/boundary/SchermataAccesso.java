@@ -83,6 +83,42 @@ public class SchermataAccesso {
             return;
         }
 
+        if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+            lblEsito.setText("Email: caratteri non validi.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (!password.matches("^[a-zA-Z0-9]+$")) {
+            lblEsito.setText("Password: caratteri non validi.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (email.length() < 15) {
+            lblEsito.setText("Email troppo corta.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (email.length() > 40) {
+            lblEsito.setText("Email troppo lunga.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (password.length() < 8) {
+            lblEsito.setText("Password troppo corta.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
+        if (password.length() > 20) {
+            lblEsito.setText("Password troppo lunga.");
+            lblEsito.setForeground(Color.RED);
+            return;
+        }
+
         UtenteDTO utente = GestioneUtentiController.accesso(email, password);
 
         if (utente == null) {

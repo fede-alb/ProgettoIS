@@ -12,8 +12,9 @@ import jakarta.persistence.Persistence;
 
 import java.util.List;
 
+// *** HELPER PER POPOLARE IL DB DI TARIFFE ***
 // *** NOTA: Da fare dopo aver popolato il DB di file e servizi ***
-public class MainAggiungiTariffe {
+public class HelperAggiungiTariffe {
     static final GestorePersistenza gestorePersistenza = new GestorePersistenza();
 
     static void main() {
