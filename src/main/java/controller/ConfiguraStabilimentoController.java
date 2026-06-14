@@ -29,6 +29,7 @@ public class ConfiguraStabilimentoController {
         return risultatoDTO;
     }
 
+    //Riceve dalla boundary, li passa all'entity, restituisce il risultato
     public static boolean configuraStabilimento(int nPrimaFila,
                                          int nFilaIntermedia,
                                          int nUltimaFila,
@@ -37,6 +38,7 @@ public class ConfiguraStabilimentoController {
                 .configuraStabilimento(nPrimaFila, nFilaIntermedia, nUltimaFila, servizi);
     }
 
+    //il controller riceve la lista di entity e la converte in una lista di DTO prima di passare alla boundary
     public static List<ServizioAggiuntivoDTO> getServizi() {
         Stabilimento stabilimento = Stabilimento.getIstanza();
         List<ServizioAggiuntivo> servizi = stabilimento.getServizi();
@@ -51,6 +53,7 @@ public class ConfiguraStabilimentoController {
         return risultatoDTO;
     }
 
+    //Prende l'istanza e delega
     public static boolean isStabilimentoGiaConfigurato() {
         return Stabilimento.getIstanza().isGiaConfigurato();
     }

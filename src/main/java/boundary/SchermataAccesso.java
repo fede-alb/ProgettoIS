@@ -159,7 +159,7 @@ public class SchermataAccesso {
         return contentPane;
     }
 
-    // Inizio dell'applicazione
+    //Inizio dell'applicazione
     public static void main(String[] args) {
         JFrame frame = new JFrame("Accesso");
         SchermataAccesso schermata = new SchermataAccesso();
