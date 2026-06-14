@@ -62,6 +62,8 @@ public class SchermataRegistrazione {
 
         lblAvviso = new JLabel(" ");
         lblAvviso.setForeground(new Color(180, 120, 0));
+        lblAvviso.setPreferredSize(new Dimension(250, 20));
+        lblAvviso.setHorizontalAlignment(SwingConstants.CENTER);
         panelCentro.add(lblAvviso);
         panelCentro.add(Box.createVerticalStrut(10));
 

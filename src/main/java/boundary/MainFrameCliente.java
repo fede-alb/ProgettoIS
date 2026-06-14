@@ -2,7 +2,6 @@ package boundary;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import controller.GestioneUtentiController;
 import dto.SessioneUtente;
 
 import javax.swing.*;

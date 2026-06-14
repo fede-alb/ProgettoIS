@@ -112,15 +112,7 @@ public class Stabilimento {
     }
 
     public List<ServizioAggiuntivo> getServizi() {
-        List<ServizioAggiuntivo> servizi = new ArrayList<>();
-        int index = 1;
-        while(true) {
-            ServizioAggiuntivo servizio = gestorePersistenza.trovaPerId(ServizioAggiuntivo.class, (long) index);
-            if(servizio == null) break;
-            servizi.add(servizio);
-            index++;
-        }
-        return servizi;
+        return gestorePersistenza.cercaPerCampi(ServizioAggiuntivo.class, Map.of());
     }
 
     public List<ServizioAggiuntivo> getServiziByID(List<Integer> idServizi) {
