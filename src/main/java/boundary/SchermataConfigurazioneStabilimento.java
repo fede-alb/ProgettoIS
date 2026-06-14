@@ -26,18 +26,21 @@ public class SchermataConfigurazioneStabilimento {
     private JTable tblRiepilogoServizi;
     private DefaultTableModel modelRiepilogo;
 
+
     public SchermataConfigurazioneStabilimento() {
         inizializzaTabellaServizi();
-        registraEventi();
+        registraEventi(); //Collega i pulsanti alle azioni
         verificaStabilimentoEsistente();
     }
 
+    //Collega i pulsanti alle azioni, ogni pulsante ha un metodo
     private void registraEventi() {
         btnAggiungiServizio.addActionListener(e -> aggiungiServizio());
         btnEliminaServizio.addActionListener(e -> eliminaServizioSelezionato());
         btnConferma.addActionListener(e -> confermaConfigurazione());
     }
 
+    //Controllo iniziale, chiama il controller
     private void verificaStabilimentoEsistente() {
         if (ConfiguraStabilimentoController.isStabilimentoGiaConfigurato()) {
             disabilitaCampi();
@@ -57,6 +60,7 @@ public class SchermataConfigurazioneStabilimento {
         btnConferma.setEnabled(false);
     }
 
+    //Aggiunge un servizio alla tabella visualizzata a schermo, validazioni seguono il category partition testing documentato
     private void aggiungiServizio() {
         String descrizione = txtDescrizioneServizio.getText().trim();
         String disponibilitaText = txtDisponibilitaServizio.getText().trim();
@@ -107,6 +111,7 @@ public class SchermataConfigurazioneStabilimento {
             }
         }
 
+        //Aggiunge la riga al modello della tabella, poi svuota i campi e mostra il messaggio
         modelRiepilogo.addRow(new Object[]{descrizione, disponibilita});
         txtDescrizioneServizio.setText("");
         txtDisponibilitaServizio.setText("");
@@ -114,6 +119,8 @@ public class SchermataConfigurazioneStabilimento {
         lblEsito.setForeground(new Color(0, 130, 0));
     }
 
+    //Il metodo getSelectedRow restituisce -1 se nessuna riga è selezionata
+    //Se c'è una selezione la riga viene rimossa e Swing aggiorna
     private void eliminaServizioSelezionato() {
         int rigaSelezionata = tblRiepilogoServizi.getSelectedRow();
 
@@ -127,11 +134,13 @@ public class SchermataConfigurazioneStabilimento {
         lblEsito.setForeground(new Color(0, 130, 0));
     }
 
+    //Raccoglie tutto e valida
     private void confermaConfigurazione() {
         String txtP = txtPrimaFila.getText().trim();
         String txtI = txtFilaIntermedia.getText().trim();
         String txtU = txtUltimaFila.getText().trim();
 
+        //Controlla campi vuoti
         if (txtP.isEmpty() || txtI.isEmpty() || txtU.isEmpty()) {
             mostraErrore("Compila tutti i campi del numero di ombrelloni.");
             return;
@@ -139,6 +148,7 @@ public class SchermataConfigurazioneStabilimento {
 
         int nPrima, nIntermedia, nUltima;
 
+        //Tenta le conversioni
         try {
             nPrima = Integer.parseInt(txtP);
             nIntermedia = Integer.parseInt(txtI);
@@ -158,6 +168,8 @@ public class SchermataConfigurazioneStabilimento {
             return;
         }
 
+        //Costruisce la mappa dei servizi, "linked" mantiene l'ordine di inserimento
+        //Colonna 0=descrizione, colonna 1 = disponibilità
         Map<String, Integer> servizi = new LinkedHashMap<>();
 
         for (int i = 0; i < modelRiepilogo.getRowCount(); i++) {
@@ -166,6 +178,7 @@ public class SchermataConfigurazioneStabilimento {
             servizi.put(desc, disp);
         }
 
+        //Chiama il controller e riceve il boolean
         boolean esito = ConfiguraStabilimentoController.configuraStabilimento(nPrima, nIntermedia, nUltima, servizi);
 
         if (esito) {
@@ -186,6 +199,7 @@ public class SchermataConfigurazioneStabilimento {
         return contentPane;
     }
 
+    //Usa DefaultTableModel per la tabella Swing, singola selezione per sapere quale riga eventualmente eliminare
     private void inizializzaTabellaServizi() {
         modelRiepilogo = new DefaultTableModel(new String[]{"Descrizione", "Disponibilità"}, 0) {
             @Override

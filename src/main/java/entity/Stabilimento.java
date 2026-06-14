@@ -14,6 +14,7 @@ public class Stabilimento {
         gestorePersistenza = new GestorePersistenza();
     }
 
+    //crea l'istanza solo la prima volta
     public static Stabilimento getIstanza() {
         if(istanza == null) {
             istanza = new Stabilimento();
@@ -21,6 +22,7 @@ public class Stabilimento {
         return istanza;
     }
 
+    //Chiede al DB le file, se la lista non è vuota allora è già configurato
     public boolean isGiaConfigurato() {
         List<Fila> file = gestorePersistenza.cercaPerCampi(Fila.class, new HashMap<>());
         return !file.isEmpty();
@@ -30,16 +32,19 @@ public class Stabilimento {
                                          int nFilaIntermedia,
                                          int nUltimaFila,
                                          Map<String, Integer> servizi) {
-        if (isGiaConfigurato()) return false;
+        if (isGiaConfigurato()) return false; //Controllo di sicurezza
 
+        //Mette i 3 numeri in una lista per poter iterare
         List<Integer> nOmbrelloniFila = new ArrayList<>();
         nOmbrelloniFila.add(nPrimaFila);
         nOmbrelloniFila.add(nFilaIntermedia);
         nOmbrelloniFila.add(nUltimaFila);
 
+        //crea oggetto fila e salva, itera 3 volte, Hibernate ha bisogno che la fila esista prima di poter salvare ombrelloni
         for(int f = 0; f < 3; f++) {
             Fila filaCorrente = new Fila();
             if(!gestorePersistenza.salva(filaCorrente)) return false;
+            //ciclo per ombrelloni della fila corrente, crea ombrelloni passandogli la fila, poi aggiorna la collezione in memoria
             for (int i = 0; i < nOmbrelloniFila.get(f); i++) {
                 Ombrellone ombrellone = new Ombrellone(filaCorrente);
                 filaCorrente.aggiungiOmbrellone(ombrellone);
@@ -48,11 +53,12 @@ public class Stabilimento {
             configuraTariffaFila(filaCorrente, f);
         }
 
+        //ciclo separato per i servizi, sono coppie chiave-valore
         for (Map.Entry<String, Integer> entry : servizi.entrySet()) {
             ServizioAggiuntivo servizio = new ServizioAggiuntivo(
                     entry.getKey(),
                     entry.getValue(),
-                    new ArrayList<>()
+                    new ArrayList<>() //Rappresenta le tariffe ma è vuota, ConfiguraTariffe avviene in un secondo momento
             );
             if(!gestorePersistenza.salva(servizio)) return false;
             configuraTariffaServizio(servizio);
