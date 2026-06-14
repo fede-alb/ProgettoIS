@@ -25,6 +25,8 @@ public class MainFrameGestore {
     public MainFrameGestore() {
         homepageLabel.setText("Homepage Gestore");
 
+        /*L'ActionListener controlla se la finestra è già aperta, se no la crea, la incapsula
+         in un JFrame e la rende visibile, il contentPane è il pannello radice per il form*/
         configuraStabilimentoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
