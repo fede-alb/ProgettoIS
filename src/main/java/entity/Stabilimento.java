@@ -203,13 +203,14 @@ public class Stabilimento {
         return effettuate.isEmpty();
     }
 
-    public List<Prenotazione> ottieniPrenotazioniDiCliente(long idCliente) {
+    public List<Prenotazione> ottieniPrenotazioniCliente(long idCliente) {
         Cliente clienteAttuale = gestorePersistenza.trovaPerId(Cliente.class, idCliente);
 
         Map<String, Object> campi = new HashMap<>();
         campi.put("cliente", clienteAttuale);
         return gestorePersistenza.cercaPerCampi(Prenotazione.class, campi);
     }
+
     public boolean annullaPrenotazione(long idPrenotazione){
         Prenotazione prenotazione = gestorePersistenza.trovaPerId(Prenotazione.class, (long) idPrenotazione);
         if(prenotazione == null) return false;
@@ -234,7 +235,6 @@ public class Stabilimento {
         );
     }
 
-
     public List<Prenotazione> ottieniPrenotazioniPerData(
             LocalDate giorno) {
 
@@ -243,5 +243,4 @@ public class Stabilimento {
                 Map.of("data", giorno)
         );
     }
-
 }

@@ -70,7 +70,7 @@ public class GestionePrenotazioneController {
 
     public static List<PrenotazioneDTO> ottieniPrenotazioniUtente(long idCliente){
         List<PrenotazioneDTO> listaDTO = new ArrayList<>();
-        List<Prenotazione> prenotazioni = Stabilimento.getIstanza().ottieniPrenotazioniDiCliente(idCliente);
+        List<Prenotazione> prenotazioni = Stabilimento.getIstanza().ottieniPrenotazioniCliente(idCliente);
 
         for(Prenotazione e : prenotazioni) {
             String serviziString = convertiServiziInStringa(e.getServizi());
@@ -92,14 +92,14 @@ public class GestionePrenotazioneController {
         return listaDTO;
     }
 
-        private static String convertiServiziInStringa(Set<ServizioAggiuntivo> servizi) {
-            if (servizi == null || servizi.isEmpty()) return "Nessuno";
-            List<String> nomi = new ArrayList<>();
-            for (ServizioAggiuntivo s : servizi) {
-                nomi.add(s.getDescrizione());
-            }
-            return String.join(", ", nomi);
+    private static String convertiServiziInStringa(Set<ServizioAggiuntivo> servizi) {
+        if (servizi == null || servizi.isEmpty()) return "Nessuno";
+        List<String> nomi = new ArrayList<>();
+        for (ServizioAggiuntivo s : servizi) {
+            nomi.add(s.getDescrizione());
         }
+        return String.join(", ", nomi);
+    }
 
     public static boolean confermaAnnullamentoPrenotazione(PrenotazioneDTO dto) {
         long id = dto.getIdPrenotazione();
