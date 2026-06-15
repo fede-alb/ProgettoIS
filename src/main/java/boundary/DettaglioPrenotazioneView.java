@@ -5,7 +5,11 @@ import dto.PrenotazioneDTO;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 import java.awt.*;
+import java.util.Locale;
 
 public class DettaglioPrenotazioneView extends JFrame {
     private JPanel rootPanel;
@@ -62,42 +66,78 @@ public class DettaglioPrenotazioneView extends JFrame {
      */
     private void $$$setupUI$$$() {
         rootPanel = new JPanel();
-        rootPanel.setLayout(new GridLayoutManager(6, 2, new Insets(0, 0, 0, 0), 150, 75, true, true));
+        rootPanel.setLayout(new GridLayoutManager(6, 2, new Insets(0, 0, 0, 0), -1, -1));
+        rootPanel.setPreferredSize(new Dimension(420, 360));
+        rootPanel.setBorder(BorderFactory.createTitledBorder(null, "Dettaglio Prenotazione", TitledBorder.CENTER, TitledBorder.TOP, null, null));
         final JLabel label1 = new JLabel();
         label1.setText("Cliente:");
-        rootPanel.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        rootPanel.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(82, 17), null, 0, false));
         final JLabel label2 = new JLabel();
         label2.setText("Data:");
-        rootPanel.add(label2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        rootPanel.add(label2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(82, 17), null, 0, false));
         final JLabel label3 = new JLabel();
         label3.setText("Stato:");
-        rootPanel.add(label3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        rootPanel.add(label3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(82, 17), null, 0, false));
         final JLabel label4 = new JLabel();
         label4.setText("Ombrellone:");
-        rootPanel.add(label4, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        rootPanel.add(label4, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(82, 17), null, 0, false));
         final JLabel label5 = new JLabel();
         label5.setText("Servizi:");
-        rootPanel.add(label5, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        rootPanel.add(label5, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(82, 17), null, 0, false));
         final JLabel label6 = new JLabel();
         label6.setText("Costo:");
-        rootPanel.add(label6, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        rootPanel.add(label6, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(82, 17), null, 0, false));
         lblCliente = new JLabel();
+        Font lblClienteFont = this.$$$getFont$$$(null, Font.BOLD, -1, lblCliente.getFont());
+        if (lblClienteFont != null) lblCliente.setFont(lblClienteFont);
         lblCliente.setText("Label");
         rootPanel.add(lblCliente, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         lblData = new JLabel();
+        Font lblDataFont = this.$$$getFont$$$(null, Font.BOLD, -1, lblData.getFont());
+        if (lblDataFont != null) lblData.setFont(lblDataFont);
         lblData.setText("Label");
         rootPanel.add(lblData, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         lblStato = new JLabel();
+        Font lblStatoFont = this.$$$getFont$$$(null, Font.BOLD, -1, lblStato.getFont());
+        if (lblStatoFont != null) lblStato.setFont(lblStatoFont);
         rootPanel.add(lblStato, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         lblOmbrellone = new JLabel();
+        Font lblOmbrelloneFont = this.$$$getFont$$$(null, Font.BOLD, -1, lblOmbrellone.getFont());
+        if (lblOmbrelloneFont != null) lblOmbrellone.setFont(lblOmbrelloneFont);
         lblOmbrellone.setText("Label");
         rootPanel.add(lblOmbrellone, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         lblServizi = new JLabel();
+        Font lblServiziFont = this.$$$getFont$$$(null, Font.BOLD, -1, lblServizi.getFont());
+        if (lblServiziFont != null) lblServizi.setFont(lblServiziFont);
         lblServizi.setText("Label");
         rootPanel.add(lblServizi, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         lblCosto = new JLabel();
+        Font lblCostoFont = this.$$$getFont$$$(null, Font.BOLD, -1, lblCosto.getFont());
+        if (lblCostoFont != null) lblCosto.setFont(lblCostoFont);
         lblCosto.setText("Label");
         rootPanel.add(lblCosto, new GridConstraints(5, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
+        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
     }
 
     /**
@@ -106,4 +146,5 @@ public class DettaglioPrenotazioneView extends JFrame {
     public JComponent $$$getRootComponent$$$() {
         return rootPanel;
     }
+
 }
