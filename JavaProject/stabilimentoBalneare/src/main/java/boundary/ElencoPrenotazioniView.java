@@ -15,7 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import com.toedter.calendar.JDateChooser;
 
-public class ElencoPrenotazioniView extends JFrame {
+public class ElencoPrenotazioniView {
     private JPanel rootPanel;
     private JButton btnMostraTutte;
     private JScrollPane scrollPanel;
@@ -24,11 +24,6 @@ public class ElencoPrenotazioniView extends JFrame {
     private final DefaultTableModel model;
 
     public ElencoPrenotazioniView() {
-        setTitle("Elenco Prenotazioni");
-        setSize(800, 400);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setContentPane(rootPanel);
         JDateChooser dateChooser = new JDateChooser();
         dateChooser.setDateFormatString("dd/MM/yyyy");
         dateChooser.setPreferredSize(new Dimension(120, 25));
@@ -37,7 +32,6 @@ public class ElencoPrenotazioniView extends JFrame {
                 new Dimension(130, 25)
         );
         pnlDateChooser.add(dateChooser);
-        setVisible(true);
 
         String[] colonne = {
                 "ID",
@@ -46,7 +40,12 @@ public class ElencoPrenotazioniView extends JFrame {
                 "Prezzo"
         };
 
-        model = new DefaultTableModel(colonne, 0);
+        model = new DefaultTableModel(colonne, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         tabPrenotazioni.setModel(model);
 
         dateChooser.setDateFormatString("dd/MM/yyyy");
@@ -65,14 +64,8 @@ public class ElencoPrenotazioniView extends JFrame {
         });
 
         btnMostraTutte.addActionListener(e -> {
-            aggiornaTabella(
-                    GestionePrenotazioneController.consultaElencoPrenotazioniDTO()
-            );
+            aggiornaTabella(GestionePrenotazioneController.consultaElencoPrenotazioniDTO());
         });
-
-        btnMostraTutte.addActionListener(e ->
-                aggiornaTabella(GestionePrenotazioneController.consultaElencoPrenotazioniDTO())
-        );
 
         aggiornaTabella(GestionePrenotazioneController.consultaElencoPrenotazioniDTO());
 
@@ -85,6 +78,7 @@ public class ElencoPrenotazioniView extends JFrame {
                                     .longValue();
                     PrenotazioneDTO p = GestionePrenotazioneController.consultaPrenotazioneDTO(idPrenotazione);
                     new DettaglioPrenotazioneView(p);
+                    tabPrenotazioni.clearSelection();
                 }
             }
         });
@@ -92,6 +86,7 @@ public class ElencoPrenotazioniView extends JFrame {
 
     public JFrame apriElencoPrenotazioniView() {
         JFrame frame = new JFrame("Elenco Prenotazioni");
+        frame.setSize(800, 400);
         frame.setContentPane(rootPanel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();

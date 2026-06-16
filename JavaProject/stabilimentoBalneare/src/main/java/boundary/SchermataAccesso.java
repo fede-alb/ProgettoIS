@@ -1,7 +1,5 @@
 package boundary;
 
-// *** NOTA: METTERE CONTROLLO INPUT DELL'UTENTE ***
-
 import controller.GestioneUtentiController;
 import dto.UtenteDTO;
 import dto.SessioneUtente;

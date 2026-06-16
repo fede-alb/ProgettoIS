@@ -50,7 +50,7 @@ public class Stabilimento {
                 filaCorrente.aggiungiOmbrellone(ombrellone);
                 if(!gestorePersistenza.salva(ombrellone)) return false;
             }
-            configuraTariffaFila(filaCorrente, f);
+            configuraTariffaFila(filaCorrente, f); // Normalmente è un caso d'uso separato
         }
 
         //ciclo separato per i servizi, sono coppie chiave-valore
@@ -61,7 +61,7 @@ public class Stabilimento {
                     new ArrayList<>() //Rappresenta le tariffe ma è vuota, ConfiguraTariffe avviene in un secondo momento
             );
             if(!gestorePersistenza.salva(servizio)) return false;
-            configuraTariffaServizio(servizio);
+            configuraTariffaServizio(servizio); // Normalmente è un caso d'uso separato
         }
 
         return true;
